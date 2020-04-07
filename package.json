@@ -8,8 +8,8 @@
     "start": "node server.js"
   },
   "engines": {
-    "node":"12.14.0"
-    },
+    "node": "12.14.0"
+  },
   "author": "Jishan97",
   "license": "ISC",
   "dependencies": {
@@ -28,7 +28,8 @@
     "nodemailer": "^6.4.2",
     "nodemon": "^2.0.2",
     "path": "^0.12.7",
-    "popups": "^1.1.3"
+    "popups": "^1.1.3",
+    "serve-index": "^1.9.1"
   },
   "devDependencies": {
     "handlebars": "^4.5.0"

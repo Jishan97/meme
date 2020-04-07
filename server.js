@@ -18,6 +18,8 @@ app.use(session({
 }));
 
 app.use('/.well-known', express.static('.well-known'), serveIndex('.well-known'));
+
+
 require('./cloudinary')
 
 const getHashedPassword = (password) => {
