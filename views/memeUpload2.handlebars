@@ -1,0 +1,102 @@
+
+<style>
+    input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: tomato;
+    color: white;
+    padding: 10px
+}
+
+.memeUploadContainer {
+    margin-top:20px;
+    display: flex;
+    justify-content: center;
+}
+
+
+</style>
+
+<form  action="/memeUpload" method="post" enctype="multipart/form-data">
+
+
+
+<div class="memeUploadContainer">
+    <img id="thumbnil" style="width:60%; margin-top:10px;"  src="" />
+</div>
+
+<div style="margin-top: 10px" class="memeUploadContainer">
+  <div class="fileUpload">
+        <label for="file-upload" class="custom-file-upload">
+        select your meme 
+      </label>
+      <input id="file-upload"  type="file" accept="image/*"  name="image"  onchange="showMyImage(this)" />
+  </div>
+</div>
+
+<div class="memeUploadContainer">
+  <div style="width: 90%" class="form-group">
+    <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter meme title">
+  </div>    
+</div>
+
+<div class="memeUploadContainer">
+  <div style="width: 90%" class="form-group">
+    <input type="text" name="description" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter meme desciption">
+  </div>    
+</div>
+
+  
+
+<div class="memeUploadContainer">
+    <select name="type" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
+      <option>#dank</option>
+      <option>#indian</option>
+      <option>#internation</option>
+      <option>#funny</option>
+      <option>#adult</option>
+    </select>
+</div>
+
+<div class="memeUploadContainer">
+    <button class="btn btn-primary" type="submit"> upload </button>
+</div>
+
+
+
+
+    <h4 style="text-align:center;margin-top:40px">Upload your meme and becoeme <span style="color:tomato">"memestar"</span> </h4>
+    
+
+
+</form>
+
+
+      
+
+ <script>
+      function showMyImage(fileInput) {
+   var files = fileInput.files;
+   for (var i = 0; i < files.length; i++) {
+     var file = files[i];
+     var imageType = /image.*/;
+     if (!file.type.match(imageType)) {
+       continue;
+     }
+     var img = document.getElementById("thumbnil");
+     img.file = file;
+     var reader = new FileReader();
+     reader.onload = (function(aImg) {
+       return function(e) {
+         aImg.src = e.target.result;
+       };
+     })(img);
+     reader.readAsDataURL(file);
+   }
+ }
+
+ </script>

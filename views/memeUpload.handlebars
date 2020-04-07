@@ -1,0 +1,51 @@
+      <link rel="stylesheet" type="text/css" href="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.css">
+
+     <style>
+         .custom-file-container:{.custom-file-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.custom-file-container__custom-file{
+     overflow: hidden;
+    position: relative;
+       background: red;
+    border-radius: .5em;
+    float: left;
+    padding: .5em;
+}
+
+
+
+.custom-file-container__custom-file [type=file] {
+    cursor: inherit;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+
+     </style>
+     
+     <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+            <label> <a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image"></a></label>
+ 
+            <label class="custom-file-container__custom-file" >
+                <input type="file" class="custom-file-container__custom-file__custom-file-input" aria-label="Upload your meme!">
+                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                <span class="custom-file-container__custom-file__custom-file-control"></span>
+            </label>
+            <div class="custom-file-container__image-preview"></div>
+        </div>
+
+        <script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script> 
+ 
+        <script>
+            var upload = new FileUploadWithPreview('myUniqueUploadId')
+        </script> 

@@ -1,0 +1,67 @@
+    <div class="appHeader">
+        <div class="left">
+            <a href="javascript:;" class="headerButton goBack">
+                <i class="icon ion-ios-arrow-back"></i>
+            </a>
+        </div>
+        <div class="pageTitle">Your details</div>
+        <div class="right">
+        </div>
+    </div>
+  <div id="appCapsule">
+        <ul class="listview link-listview">
+          {{#each data}}
+            <li>
+                <a href="#">
+                    Meme badge
+                    <span class="text-muted"></span>
+                </a>
+                  <li>
+                      
+                      
+   {{/each}}
+ {{#each data}}
+                <a href="#">
+                    Name
+                    <span class="text-muted">{{username}}</span>
+                </a>
+            </li>
+               {{/each}}
+                {{#each data}}
+
+              <li>
+                <a href="#">
+                    Email   
+                    <span class="text-muted">{{email}}</span>
+                </a>
+            </li>
+{{/each}}
+              <li>
+                <a href="#">
+                    Change password
+                    <span class="text-muted">Edit</span>
+                </a>
+            </li>
+              <li>
+                <a href="#">
+                    Total memes
+                    <span class="text-muted">{{totalMeme}}</span>
+                </a>
+            </li>
+              <li>
+                <a href="#">
+                    Location
+                    <span class="text-muted">Edit</span>
+                </a>
+            </li>
+              <li>
+                <a href="#">
+                    
+                    <span class="text-muted">logout</span>
+                </a>
+            </li>
+            </li>
+
+           
+        </ul>
+        </div>

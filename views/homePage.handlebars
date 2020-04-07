@@ -1,0 +1,168 @@
+
+    <div id="loader">
+        <div class="spinner-grow text-secondary" role="status"></div>
+    </div>
+
+    <div style="padding-top: 10px" id="appCapsule">
+
+        <div  class="section full mb-3">
+             <div class="section-title">Memes that don't lie</div>
+
+            <div class="carousel-multiple owl-carousel owl-theme">
+                <div class="item">
+                    <a href="/dankMemes"> <img style=" " src="assets/img/sample/photo/1.jpg" alt="alt" class="imaged w-100">
+                     <p style="margin-left: 5px;font-size:90%">Dank memes  &#8594; </p>
+                     </a>
+                   
+                </div>
+                <div class="item">
+                    {{!-- -webkit-box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75);
+                    -moz-box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75);
+                    box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75); --}}
+                    <a href="/indianMemes"> <img  style="" src="assets/img/sample/photo/2.jpg" alt="alt" class="imaged w-100">
+                    <p style="margin-left: 5px;font-size:90%">Indian memes &#8594;</p></a>
+                   
+                </div>
+                <div class="item">
+                    <a href="/funnyMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged w-100">
+                    <p style="margin-left: 5px;font-size:90%">Funny memes &#8594;</p></a>
+                   
+                </div>
+                  <div class="item">
+                    <a href="/adultMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged w-100">
+                    <p style="margin-left: 5px;font-size:90%">Adult memes &#8594;</p></a>
+                   
+                </div>
+            </div>
+        </div>
+
+{{#each allMemes}}
+        <div  class="section mt-2">
+            <div class="card">
+                <img style="width:auto" src="{{meme_image}}" height="300" style=" object-fit: cover;" class="card-img-top" alt="image">
+                <div class="card-body">
+                    <!-- <h5 class="card-title">Card title</h5> -->
+                    <h6 class="card-subtitle mb-1">meme_by @Mihir97</h6>
+                    <p class="card-text">{{meme_type}}</p>
+                </div>
+            </div>
+        </div>
+
+        {{/each}}
+
+    
+
+
+    </div>
+
+
+   <!--footer -->
+    <div class="appBottomMenu">
+        <a href="app-components.html" class="item">
+            <div class="col">
+                <i class="icon ion-ios-today"></i>
+                <strong>Home</strong>
+            </div>
+        </a>
+        <a href="component-listview.html" class="item">
+            <div class="col">
+                <i class="icon ion-ios-list"></i>
+                <strong>Listview</strong>
+            </div>
+        </a>
+        <a href="javascript:;" class="item">
+            <div class="col">
+                <div class="action-button">
+                    <i class="icon ion-md-add"></i>
+                </div>
+            </div>
+        </a>
+        <a href="component-messages.html" class="item">
+            <div class="col">
+                <i class="icon ion-ios-chatboxes"></i>
+                <strong>Messages</strong>
+            </div>
+        </a>
+        <a href="javascript:;" class="item" data-toggle="modal" data-target="#sidebarPanel">
+            <div class="col">
+                <i class="icon ion-ios-menu"></i>
+                <strong>Menu</strong>
+            </div>
+        </a>
+    </div>
+
+    <div class="modal fade panelbox panelbox-left" id="sidebarPanel" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <!-- profile box -->
+                    <div class="profileBox pt-2 pb-2">
+                        <div class="image-wrapper">
+                            <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged rounded w36">
+                        </div>
+                        <div class="in">
+                            <strong>Kimmy Tomoaki</strong>
+                            <div class="text-muted">Member</div>
+                        </div>
+                    </div>
+                    <!-- * profile box -->
+                    <div class="listview-title mt-1">Menu</div>
+                    <ul class="listview flush transparent no-line image-listview">
+                        <li>
+                            <a href="app-components.html" class="item">
+                                <div class="icon-box bg-primary">
+                                    <i class="icon ion-ios-home"></i>
+                                </div>
+                                <div class="in">
+                                    Components
+                                    <span class="badge badge-danger">10</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="app-components.html" class="item">
+                                <div class="icon-box bg-danger">
+                                    <i class="icon ion-ios-alarm"></i>
+                                </div>
+                                <div class="in">
+                                    <div>Alarm</div>
+                                    <span class="text-muted">05:20 AM</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="component-messages.html" class="item">
+                                <div class="icon-box bg-success">
+                                    <i class="icon ion-ios-chatbubbles"></i>
+                                </div>
+                                <div class="in">
+                                    <div>Chat</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="component-listview.html" class="item">
+                                <div class="icon-box bg-info">
+                                    <i class="icon ion-ios-list"></i>
+                                </div>
+                                <div class="in">
+                                    <div>Listview</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="app-components.html" class="item" data-dismiss="modal">
+                                <div class="icon-box bg-warning">
+                                    <i class="icon ion-md-close"></i>
+                                </div>
+                                <div class="in">
+                                    <div>Close Sidebar</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,63 @@
+{{!-- <div class="row justify-content-md-center" style="margin-top: 100px">
+    <div class="col-md-6">
+
+        {{#if message}}
+            <div class="alert {{messageClass}}" role="alert">
+                {{message}}
+            </div>
+        {{/if}}
+
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        
+    </div>
+</div> --}}
+
+
+
+   {{#if message}}
+            <div class="alert {{messageClass}}" role="alert">
+                {{message}}
+            </div>
+        {{/if}}
+
+
+        <div class="section mt-2 mb-5">
+                <h2 style="text-align: center">Login!</h2>
+            <form action="/login" method="POST">
+
+             
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="email1">E-mail</label>
+                        <input type="email" name="email"  class="form-control" id="email1" placeholder="Your e-mail">
+                        <i class="clear-input icon ion-ios-close-circle"></i>
+                    </div>
+                </div>
+
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="password1">Password</label>
+                        <input type="password" name="password" class="form-control" id="password1" placeholder="Your password">
+                        <i class="clear-input icon ion-ios-close-circle"></i>
+                    </div>
+                </div>
+
+
+                <div style="position:relative" class="form-button-group">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+                </div>
+                <p style="text-align: center">Register  <a href="/register">here</a> </p>
+
+            </form>
+        </div>
