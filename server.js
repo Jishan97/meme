@@ -17,7 +17,7 @@ app.use(session({
   secret: "Shh, its a secret!"
 }));
 
-
+app.use('/.well-known', express.static('.well-known'), serveIndex('.well-known'));
 require('./cloudinary')
 
 const getHashedPassword = (password) => {
