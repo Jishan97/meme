@@ -12,6 +12,7 @@ const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const authTokens = {};
 var session = require('express-session');
+var serveIndex = require('serve-index');
 
 app.use(session({
   secret: "Shh, its a secret!"
