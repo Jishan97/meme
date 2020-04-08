@@ -83,20 +83,26 @@ app.get('/',(req,res)=>{
   
   app.get('/homePage',async(req,res)=>{
     console.log('opening home page')
-    if (req.user) {
+  //   if (req.user) {
 
+  //     const allMemes = await MemeData.find().sort({_id:-1})
+  //     console.log('allmeme',allMemes)
+
+  //     res.render('homePage',{
+  //       allMemes
+  //     });
+  // } else {
+  //     res.render('login', {
+  //         message: 'Please login to continue',
+  //         messageClass: 'alert-danger'
+  //     });
+  // }
       const allMemes = await MemeData.find().sort({_id:-1})
-      console.log('allmeme',allMemes)
 
-      res.render('homePage',{
-        allMemes
-      });
-  } else {
-      res.render('login', {
-          message: 'Please login to continue',
-          messageClass: 'alert-danger'
-      });
-  }
+  res.render('homePage',{
+          allMemes
+        });
+
 });
 
 
@@ -300,6 +306,47 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 
   })
 
+
+
+
+
+// Dank memes 
+
+app.get('/dankMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#dank'})
+  console.log(allMemes)
+  res.render('dankMemes',{
+    allMemes
+  })
+})
+
+app.get('/indianMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#indian'})
+  console.log(allMemes)
+  res.render('indianMemes',{
+    allMemes
+  })
+})
+
+app.get('/funnyMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#funny'})
+  console.log(allMemes)
+  res.render('funnyMemes',{
+    allMemes
+  })
+})
+
+app.get('/adultMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#adult'})
+  console.log(allMemes)
+  res.render('adultMemes',{
+    allMemes
+  })
+})
 
   
 

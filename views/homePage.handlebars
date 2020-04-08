@@ -1,4 +1,13 @@
 
+    <style>
+        .item{
+            transition: all .2s ease-in-out;
+        }
+        .item:hover{
+           transform: scale(0.9);
+        }
+    </style>
+    
     <div id="loader">
         <div class="spinner-grow text-secondary" role="status"></div>
     </div>
@@ -39,7 +48,7 @@
 {{#each allMemes}}
         <div  class="section mt-2">
             <div class="card">
-                <img style="width:auto" src="{{meme_image}}" height="300" style=" object-fit: cover;" class="card-img-top" alt="image">
+                <img  src="{{meme_image}}" class="imaged img-fluid" alt="image">
                 <div class="card-body">
                     <!-- <h5 class="card-title">Card title</h5> -->
                     
