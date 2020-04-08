@@ -5003,8 +5003,8 @@ a.close.disabled {
   background-color: currentColor;
   border-radius: 50%;
   opacity: 0;
-  -webkit-animation: spinner-grow .75s linear infinite;
-  animation: spinner-grow .75s linear infinite; }
+  -webkit-animation: spinner-grow .4s linear infinite;
+  animation: spinner-grow .4s linear infinite; }
 
 .spinner-grow-sm {
   width: 1rem;
