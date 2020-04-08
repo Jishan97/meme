@@ -46,21 +46,31 @@
         </div>
         {{{body}}}
 
-
+<style>
+    .navH:hover{
+        background-color: rgb(0,111,255,0.8);
+        border-radius: 30%;
+        color: white;
+        transition: .3s linear
+    }
+    .strongT:hover{
+        color: white;
+    }
+</style>
 
             <!-- App Bottom Menu -->
     <div class="appBottomMenu">
-        <a href="/homePage" class="item">
-            <div class="col">
+        <a href="/homePage" class="item navH">
+            <div class="col ">
                 {{!-- <i class="icon ion-ios-today"></i> --}}
                 <svg class="bi bi-house" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V7h1v6.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5zm11-11V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
   <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
 </svg>
-                <strong>Home</strong>
+                <strong class="strongT">Home</strong>
             </div>
         </a>
-        <a href="/trendingPage" class="item">
+        <a href="/trendingPage" class="item navH">
             <div class="col">
                 {{!-- <i class="icon ion-ios-list"></i> --}}
                 <svg class="bi bi-app-indicator" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +87,7 @@
                 </div>
             </div>
         </a>
-        <a href="/notification" class="item">
+        <a href="/notification" class="item navH">
             <div class="col">
                 {{!-- <i class="icon ion-ios-chatboxes"></i> --}}
                               <svg class="bi bi-bell" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +97,7 @@
                 <strong>Notification</strong>
             </div>
         </a>
-         <a href="/profile" class="item">
+         <a href="/profile" class="item navH">
             <div class="col">
                
      <svg class="bi bi-person" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

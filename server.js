@@ -85,7 +85,7 @@ app.get('/',(req,res)=>{
     console.log('opening home page')
     if (req.user) {
 
-      const allMemes = await MemeData.find({})
+      const allMemes = await MemeData.find().sort({_id:-1})
       console.log('allmeme',allMemes)
 
       res.render('homePage',{
