@@ -97,11 +97,11 @@ app.get('/',(req,res)=>{
           messageClass: 'alert-danger'
       });
   }
-      const allMemes = await MemeData.find().sort({_id:-1})
+  //     const allMemes = await MemeData.find().sort({_id:-1})
 
-  res.render('homePage',{
-          allMemes
-        });
+  // res.render('homePage',{
+  //         allMemes
+  //       });
 
 });
 
