@@ -15,13 +15,14 @@
      <div  class="section mt-2">
             <div class="card">
                 <img  src="{{meme_image}}" class="imaged img-fluid" alt="image">
-                <div class="card-body">
+                 <div class="card-body">
                     <!-- <h5 class="card-title">Card title</h5> -->
                     
-                       <h6 class="card-subtitle mb-1">{{meme_title}}</h6>
-                          <h6 class="card-subtitle mb-1">{{meme_type}}</h6>
-                             <h6 class="card-subtitle mb-1">{{meme_description}}</h6>
-                             <h6 class="card-subtitle mb-1">meme_by @Mihir97</h6>
+                       <h6 class="card-subtitle mb-1"> <strong>Title</strong> {{meme_title}}</h6>
+                          <h6 class="card-subtitle mb-1"><strong>Tags </strong>{{meme_type}}</h6>
+                             <h6 class="card-subtitle mb-1"><strong>Description </strong>{{meme_description}}</h6>
+                             <h6  class="card-subtitle mb-1"><strong>Meme by </strong>{{meme_by}}</h6>
+                             <h6  style="text-align: right" class="card-subtitle mb-1"> <strong>Created At </strong>{{meme_createdAt}}</h6>
                     {{!-- <p class="card-text">{{meme_title}}</p>
                      <p class="">{{meme_type}}</p>
                     <p class="">{{meme_description}}</p> --}}

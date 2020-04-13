@@ -252,18 +252,92 @@ app.get('/protected', (req, res) => {
       });
   }
 });
+app.post('/memeUploadVideo',upload.single('video'), async(req,res)=>{
+  console.log(req.file.path)
+  try {
+  const result = await cloudinary.uploader.upload(req.file.path,{resource_type: "video"})
+  const meme_video =result.secure_url;
+  const email = req.session.session_email;
+  const meme_title = req.body.title;
+  const meme_description = req.body.description;
+  const meme_type = req.body.type;
+  const meme_by = req.session.session_email;
+  const createdAt = Date.now();
+
+
+
+  console.log('session username',email)
+  console.log('image url',meme_video)
+
+ var memeD = {
+  meme_video,
+  meme_title,
+  meme_description,
+  createdAt,
+  meme_type,
+ 
+  
+  }
+
+
+MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
+.then((url)=>{
+    console.log(url);
+    res.send(url)
+  }).catch(e=>console.log(e))
+
+  
+
+
+  // const allMemes = new MemeData({
+  //   meme_video,
+  //   meme_title,
+  //   meme_description,
+  //   createdAt,
+  //   meme_type
+  // })
+  
+  // allMemes.save((result)=>{
+  
+  //   console.log(result)
+  // })
+  res.redirect('/homePage'); 
+
+  
+
+
+
+  console.log(result)
+  }
+
+  catch(error){
+    console.log(error)
+  }
+  
+  
+
+})
+
+
+
+
+app.get('/memeUploadVideo',(req,res)=>{
+  res.render('memeUploadVideo')
+})
 
   // uploading meme 
   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
   const result = await cloudinary.uploader.upload(req.file.path);
-
+  const meme_createdAt = new Date().toJSON().slice(0, 10);
   const meme_image =result.secure_url;
   const email = req.session.session_email;
   const meme_title = req.body.title;
   const meme_description = req.body.description;
-  const meme_type = req.body.type
-  const createdAt = Date.now();
+  const meme_type = req.body.type;
+  const meme_by = req.session.session_email;
+  const meme_trend = req.session.meme_trend;
+
 
 
   console.log('session username',email)
@@ -273,8 +347,10 @@ app.get('/protected', (req, res) => {
   meme_image,
   meme_title,
   meme_description,
-  createdAt,
-  meme_type
+  meme_type,
+  meme_trend,
+  meme_createdAt
+  
   
   }
 
@@ -282,6 +358,7 @@ app.get('/protected', (req, res) => {
 MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 .then((url)=>{
     console.log(url);
+    res.redirect('/homePage'); 
     res.send(url)
   }).catch(e=>console.log(e))
 
@@ -292,15 +369,17 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
     meme_image,
     meme_title,
     meme_description,
-    createdAt,
-    meme_type
+    meme_type,
+    meme_by,
+    meme_trend,
+    meme_createdAt
   })
   
   allMemes.save((result)=>{
   
     console.log(result)
   })
-  res.redirect('/homePage'); 
+
 
   
 
@@ -339,6 +418,10 @@ app.get('/funnyMemes',async(req,res)=>{
   })
 })
 
+
+
+
+
 app.get('/adultMemes',async(req,res)=>{
 
   const allMemes = await MemeData.find({meme_type:'#adult'})
@@ -349,6 +432,10 @@ app.get('/adultMemes',async(req,res)=>{
 })
 
   
+
+
+
+
 
 const port = process.env.PORT || 3000;
 

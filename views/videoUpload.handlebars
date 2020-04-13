@@ -1,0 +1,108 @@
+
+
+
+<style>
+    input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: tomato;
+    color: white;
+    padding: 10px
+}
+
+.memeUploadContainer {
+    margin-top:20px;
+    display: flex;
+    justify-content: center;
+}
+
+
+</style>
+
+<div class="memeUploadContainer">
+   <video id="v" style="width: 100%;height:400px;display:none" controls>
+  <source id="video_here">
+    {{!-- Your browser does not support HTML5 video./ --}}
+</video>
+
+</div>
+
+
+
+
+
+
+
+<form  action="/videT" method="post" enctype="multipart/form-data">
+
+<div style="margin-top: 10px" class="memeUploadContainer">
+  <div class="fileUpload">
+        <label for="file-upload" class="custom-file-upload">
+        select your meme 
+      </label>
+<input type="file"  id="file-upload"  name="video" class="file_multi_video" accept="video/*">
+  </div>
+</div>
+
+<div class="memeUploadContainer">
+  <div style="width: 90%" class="form-group">
+    <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter meme title">
+  </div>    
+</div>
+
+<div class="memeUploadContainer">
+  <div style="width: 90%" class="form-group">
+    <input type="text" name="description" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter meme desciption">
+  </div>    
+</div>
+
+  
+
+<div class="memeUploadContainer">
+    <select name="type" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
+      <option>#dank</option>
+      <option>#indian</option>
+      <option>#internation</option>
+      <option>#funny</option>
+      <option>#adult</option>
+    </select>
+</div>
+
+<div class="memeUploadContainer">
+    <button class="btn btn-primary" type="submit"> upload </button>
+</div>
+
+
+
+
+    <h4 style="text-align:center;margin-top:40px">Upload your meme and becoeme <span style="color:tomato">"memestar"</span> </h4>
+    
+
+
+</form>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+
+
+<script>
+
+
+    $(document).on("change", ".file_multi_video", function(evt) {
+      document.getElementById("v").style.display = 'block'
+
+  var $source = $('#video_here');
+  $source[0].src = URL.createObjectURL(this.files[0]);
+  $source.parent()[0].load();
+});
+</script>
+
+

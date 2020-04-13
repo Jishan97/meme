@@ -54,16 +54,28 @@
 
 <div class="memeUploadContainer">
     <select name="type" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
-      <option>#dank</option>
-      <option>#indian</option>
-      <option>#internation</option>
-      <option>#funny</option>
-      <option>#adult</option>
+      <option value="">Select Meme Tag</option>
+      <option value="#dank">#dank</option>
+      <option value="#indian">#indian</option>
+      <option value="#internation">#internation</option>
+      <option value="#funny">#funny</option>
+      <option value="#adult">#adult</option>
+    </select>
+</div>
+
+
+<div class="memeUploadContainer">
+    <select name="trend" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
+      <option value="">Select Meme Trend</option>
+      <option value="its_her_choice">its_her_choice</option>
+      <option value="corona_lockdown">corona_lockdown</option>
+      <option value="coffin_dance">coffin_dance</option>
+      <option>none</option>
     </select>
 </div>
 
 <div class="memeUploadContainer">
-    <button class="btn btn-primary" type="submit"> upload </button>
+    <button class="btn btn-primary" type="submit" onSubmit="document.getElementById('submit').disabled=true;"> upload </button>
 </div>
 
 
