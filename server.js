@@ -83,20 +83,20 @@ app.get('/',(req,res)=>{
   
   app.get('/homePage',async(req,res)=>{
     console.log('opening home page')
-  //   if (req.user) {
+    if (req.user) {
 
-  //     const allMemes = await MemeData.find().sort({_id:-1})
-  //     console.log('allmeme',allMemes)
+      const allMemes = await MemeData.find().sort({_id:-1})
+      console.log('allmeme',allMemes)
 
-  //     res.render('homePage',{
-  //       allMemes
-  //     });
-  // } else {
-  //     res.render('login', {
-  //         message: 'Please login to continue',
-  //         messageClass: 'alert-danger'
-  //     });
-  // }
+      res.render('homePage',{
+        allMemes
+      });
+  } else {
+      res.render('login', {
+          message: 'Please login to continue',
+          messageClass: 'alert-danger'
+      });
+  }
       const allMemes = await MemeData.find().sort({_id:-1})
 
   res.render('homePage',{
