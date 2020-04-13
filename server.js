@@ -358,7 +358,7 @@ app.get('/memeUploadVideo',(req,res)=>{
 MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 .then((url)=>{
     console.log(url);
-    res.redirect('/homePage'); 
+  
     res.send(url)
   }).catch(e=>console.log(e))
 
@@ -376,7 +376,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
   })
   
   allMemes.save((result)=>{
-  
+    res.redirect('/homePage'); 
     console.log(result)
   })
 
