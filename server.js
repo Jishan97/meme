@@ -359,7 +359,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 .then((url)=>{
     console.log(url);
   
-    res.send(url)
+    // res.send(url)
   }).catch(e=>console.log(e))
 
   
