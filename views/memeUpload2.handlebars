@@ -21,7 +21,7 @@
 
 </style>
 
-<form  action="/memeUpload" method="post" enctype="multipart/form-data">
+<form  action="/memeUpload" method="post" enctype="multipart/form-data"  onSubmit="document.getElementById('submit').disabled=true;">
 
 
 
@@ -75,7 +75,7 @@
 </div>
 
 <div class="memeUploadContainer">
-    <button class="btn btn-primary" type="submit" onSubmit="document.getElementById('submit').disabled=true;"> upload </button>
+    <button class="btn btn-primary" type="submit" id="submit"> upload </button>
 </div>
 
 
