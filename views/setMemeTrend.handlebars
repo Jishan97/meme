@@ -1,0 +1,95 @@
+<br><br>
+<div class="container">
+
+
+<div class="row">
+  <div class="col-sm-6">
+  <h1>Set meme trend </h1>
+  <form action="/selectMemeTrendA" method="POST">
+  {{#each data1}}
+<div class="form-check">
+  <input class="form-check-input" name="memA[]" type="checkbox" value="{{memeTitle}}" id="defaultCheck1">
+  <label class="form-check-label" for="defaultCheck1">
+   {{memeTitle}}
+  </label>
+</div>
+{{/each}}
+<button style="text-align: center"  type="submit" class="btn btn-info">ADD</button>
+
+</form>
+<br><br>
+
+  </div>
+   <div class="col-sm-6">
+  <h1>Set meme trend </h1>
+  <form action="/selectMemeTrendS" method="POST">
+    {{#each data1}}
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="memeS" id="exampleRadios1" value="{{memeTitle}}" checked>
+  <label class="form-check-label" for="exampleRadios1">
+   {{memeTitle}}
+ 
+  </label>
+</div>
+  {{/each}}
+<button style="text-align: center"  type="submit" class="btn btn-info">ADD</button>
+
+</form>
+<br><br>
+
+  </div>
+</div>
+  <form action="/setMemeTrend" method="POST">
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">MEME</span>
+  </div>
+  <input type="text" name="memeTitle" class="form-control" placeholder="ADD Meme Trend" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+<select name="memeTT" class="form-control">
+  <option>memeTrend</option>
+    <option>memeTag</option>
+
+</select>
+<br>
+<button style="text-align: center"  type="submit" class="btn btn-info">ADD</button>
+</form>
+
+<br>
+    <h1>MEME Trends and Tags </h1>
+    {{#each data}}
+<ul  style="margin:5px" class="list-group list-group-horizontal-md">
+  
+ <p class="list-group-item list-group-item-action">{{memeTitle}}</p>
+  <p style="margin-right: 5px" class="list-group-item list-group-item-action">{{memeTT}}</p>
+
+
+<form action="/DeleteMemeTrend" method="POST">
+ <input type="hidden" name="id" value="{{id}}">
+      <button style="text-align: center;width:100px;margin-right:5px" type="submit" class=" list-group-item list-group-item-action active">DELETE</button>
+</form>
+
+
+<form action="/UpdateMemeTrend" method="POST">
+ <input type="hidden" name="id" value="{{id}}">
+  <button style="text-align: center;width:100px" type="submit" class=" btn-danger list-group-item list-group-item-action">UPDATE</button> 
+</form>
+
+</ul>
+{{/each}}
+<br>
+<br>
+
+
+
+
+
+
+</div>
+
+
+
+
+<br>
+<br><br>
+<br>

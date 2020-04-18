@@ -9,7 +9,7 @@ const memeCollection = new Schema({
             meme_image:{type:String},
             meme_createdAt:{type:String},
             meme_location:{type:String},
-            meme_type:{type:String},
+            meme_type:{type:String}, /* type and tags are same */
             meme_category:{type:String},
             meme_likes:{type:String},
             meme_shared:{type:String},

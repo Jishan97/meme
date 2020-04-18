@@ -6,6 +6,10 @@ const cloudinary = require('cloudinary').v2;
 var {mongoose} = require('./db/mongoose');
 var {MemeUser} = require('./model/memeUser');
 var {MemeData} = require('./model/memeCollection');
+var {adminSetMTT} = require('./model/adminSetMTT');
+
+
+var {AllMemeTT} = require('./model/AllMemeTT')
 const upload = require('./multer');
 const path = require('path');
 const crypto = require('crypto');
@@ -88,8 +92,11 @@ app.get('/',(req,res)=>{
       const allMemes = await MemeData.find().sort({_id:-1})
       console.log('allmeme',allMemes)
 
+      const memeTrendTag = await AllMemeTT.find({})
+
+
       res.render('homePage',{
-        allMemes
+        allMemes,memeTrendTag
       });
   } else {
       res.render('login', {
@@ -110,8 +117,15 @@ app.get('/',(req,res)=>{
     res.render('memeUpload')
   })
 
-  app.get('/memeUpload2',(req,res)=>{
-    res.render('memeUpload2')
+  app.get('/memeUpload2', async(req,res)=>{
+
+    const memeTag = await AllMemeTT.find({memeTT:'memeTag'})
+    const memeTrend = await AllMemeTT.find({memeTT:'memeTrend'})
+
+    console.log(memeTrend)
+    res.render('memeUpload2',{
+      memeTag,memeTrend
+    })
   })
 
 
@@ -120,8 +134,48 @@ app.get('/',(req,res)=>{
   })
 
 
-  app.get('/trendingPage',(req,res)=>{
-    res.render('trendingPage')
+  app.get('/trendingPage', async(req,res)=>{
+    const mainD = await MemeData.find({})
+    const memeAtrending = await adminSetMTT.find({})
+  
+    const memeArray = []
+    const finalMemeArray = []   /* Final data for array of trending memes*/
+  
+    const singleMeme=[]
+    const finalMemeSingle = []  /* final data for single trendig meme */
+    // console.log(memeAtrending);
+  
+  
+    memeAtrending.map((one)=>{
+      memeArray.push(one.memeTrendSA)
+    })
+    memeAtrending.map((one)=>{
+      singleMeme.push(one.memeTrendS)
+    })
+  
+    memeArray[0].map((one)=>{
+      mainD.map((two)=>{
+        if(two.meme_trend == one){
+          finalMemeArray.push(two)
+        }
+      })
+    })
+  
+     singleMeme.map((one)=>{
+       mainD.map((two)=>{
+         if(two.meme_trend == one){
+           finalMemeSingle.push(two)
+         }
+       })
+    })
+  
+  
+    console.log('array if meme',finalMemeArray)
+ 
+
+    res.render('trendingPage',{
+      finalMemeArray,finalMemeSingle
+    })
   })
 
   app.get('/register', (req, res) => {
@@ -336,7 +390,7 @@ app.get('/memeUploadVideo',(req,res)=>{
   const meme_description = req.body.description;
   const meme_type = req.body.type;
   const meme_by = req.session.session_email;
-  const meme_trend = req.session.meme_trend;
+  const meme_trend = req.body.trend;
 
 
 
@@ -418,6 +472,97 @@ app.get('/funnyMemes',async(req,res)=>{
   })
 })
 
+app.get('/setMemeTrend',async(req,res)=>{
+  const data = await AllMemeTT.find({}).sort({_id:-1})
+  const data1 = await AllMemeTT.find({memeTT:'memeTrend'})
+
+  const mainD = await MemeData.find({})
+  const memeAtrending = await adminSetMTT.find({})
+
+  const memeArray = []
+  const finalMemeArray = []   /* Final data for array of trending memes*/
+
+  const singleMeme=[]
+  const finalMemeSingle = []  /* final data for single trendig meme */
+  // console.log(memeAtrending);
+
+
+  memeAtrending.map((one)=>{
+    memeArray.push(one.memeTrendSA)
+  })
+  memeAtrending.map((one)=>{
+    singleMeme.push(one.memeTrendS)
+  })
+
+  memeArray[0].map((one)=>{
+    mainD.map((two)=>{
+      if(two.meme_trend == one){
+        finalMemeArray.push(two)
+      }
+    })
+  })
+
+   singleMeme.map((one)=>{
+     mainD.map((two)=>{
+       if(two.meme_trend == one){
+         finalMemeSingle.push(two)
+       }
+     })
+  })
+
+
+  console.log('array if meme',finalMemeArray)
+
+ res.render('setMemeTrend',{
+   data,data1,finalMemeArray,finalMemeSingle
+ })
+})
+
+app.post('/DeleteMemeTrend',(req,res)=>{
+
+  const id = req.body.id;
+  console.log(id)
+ 
+  AllMemeTT.findByIdAndRemove(id, function (err, deletedStandUp) {
+    // handle any potential errors here
+    res.redirect('/setMemeTrend');
+  });
+
+})
+
+
+app.post('/UpdateMemeTrend',(req,res)=>{
+
+  const id = req.body.id;
+  console.log(id)
+  const filter = {
+    id: id
+  };
+  AllMemeTT.findOneAndUpdate(filter, update).then((result) => {
+    console.log(result)
+    res.redirect('/setMemeTrend')
+  })
+
+
+})
+
+
+app.post('/setMemeTrend',(req,res)=>{
+
+  const memeTitle = req.body.memeTitle;
+  const memeTT =req.body.memeTT;
+
+  var memed = new AllMemeTT({
+  memeTitle,
+  memeTT
+})
+
+memed.save().then((data)=>{
+  console.log(data)
+  res.redirect('/setMemeTrend')
+})
+})
+
 
 
 
@@ -432,10 +577,81 @@ app.get('/adultMemes',async(req,res)=>{
 })
 
   
+app.post('/selectMemeTrendA',async(req,res)=>{
+
+ const memes = req.body.memA;
+console.log(memes);
+ 
+
+const Admin = await adminSetMTT.find({})
+const role = 'admin'
 
 
 
+if(Admin.length>0){
+  const allMemes = new adminSetMTT({
+    role:'admin',
+    memeTrendSA:memes
+  })
+  
+  console.log('going in if');
+  adminSetMTT.findOneAndRemove(role, function (err, deletedStandUp) {
+    // handle any potential errors here
+    // res.redirect('/setMemeTrend');
+  });
+  
+  // adminSetMTT.findOneAndUpdate({role}, { $push : {memeTrendSA:memes}})
+  // .then((url)=>{
+  //     console.log(url);
+  //     res.redirect('/setMemeTrend')
+  //     // res.send(url)
+  //   }).catch(e=>console.log(e))
 
+  allMemes.save().then((data)=>{
+    console.log(data)
+    res.redirect('/setMemeTrend')
+  })
+
+
+} 
+
+
+else{
+  const allMemes = new adminSetMTT({
+    role:'admin',
+    memeTrendSA:memes
+  })
+  
+  console.log('going in else');
+  allMemes.save().then((data)=>{
+    console.log(data)
+    res.redirect('/setMemeTrend')
+  })
+}
+
+
+})
+
+
+
+app.post('/selectMemeTrendS',(req,res)=>{
+
+
+  const memes = req.body.memeS;
+  console.log(memes);
+   
+  
+  // const Admin = await adminSetMTT.find({})
+  const role = 'admin'
+
+  adminSetMTT.findOneAndUpdate({role}, { memeTrendS:memes})
+.then((url)=>{
+    console.log(url);
+    res.redirect('/setMemeTrend')
+  }).catch(e=>console.log(e))
+
+    
+})
 
 const port = process.env.PORT || 3000;
 

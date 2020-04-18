@@ -53,23 +53,24 @@
   
 
 <div class="memeUploadContainer">
+  
     <select name="type" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
-      <option value="">Select Meme Tag</option>
-      <option value="#dank">#dank</option>
-      <option value="#indian">#indian</option>
-      <option value="#internation">#internation</option>
-      <option value="#funny">#funny</option>
-      <option value="#adult">#adult</option>
+      
+            <option value="">Select Tag</option>
+             {{#each memeTag}}
+      <option value="{{memeTitle}}">{{memeTitle}}</option>
+    {{/each}}
     </select>
 </div>
 
 
 <div class="memeUploadContainer">
     <select name="trend" style="width: 90%" class="form-control" id="exampleFormControlSelect1">
-      <option value="">Select Meme Trend</option>
-      <option value="its_her_choice">its_her_choice</option>
-      <option value="corona_lockdown">corona_lockdown</option>
-      <option value="coffin_dance">coffin_dance</option>
+      <option>Select Meme Trend</option>
+     {{#each memeTrend}} 
+      
+      <option  value="{{memeTitle}}" >{{memeTitle}}</option>
+      {{/each}}
       <option>none</option>
     </select>
 </div>
