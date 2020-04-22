@@ -4973,8 +4973,8 @@ a.close.disabled {
   border: .25em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
-  -webkit-animation: spinner-border .75s linear infinite;
-  animation: spinner-border .75s linear infinite; }
+  -webkit-animation: spinner-border .2s linear ;
+  animation: spinner-border .2s linear ; }
 
 .spinner-border-sm {
   width: 1rem;
@@ -5003,8 +5003,8 @@ a.close.disabled {
   background-color: currentColor;
   border-radius: 50%;
   opacity: 0;
-  -webkit-animation: spinner-grow .4s linear infinite;
-  animation: spinner-grow .4s linear infinite; }
+  -webkit-animation: spinner-grow .2s linear ;
+  animation: spinner-grow .2s linear ; }
 
 .spinner-grow-sm {
   width: 1rem;
