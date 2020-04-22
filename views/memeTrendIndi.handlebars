@@ -1,0 +1,35 @@
+      <div class="appHeader">
+        <div class="left">
+            <a href="javascript:;" class="headerButton goBack">
+                <i class="icon ion-ios-arrow-back"></i>
+            </a>
+        </div>
+        <div class="pageTitle">{{memeTrend}}</div>
+        <div class="right">
+        </div>
+    </div>
+
+      <div id="appCapsule">
+    
+     {{#each allMemes}}
+     <div  class="section mt-2">
+            <div class="card">
+                <img  src="{{meme_image}}" class="imaged img-fluid" alt="image">
+                 <div class="card-body">
+                    <!-- <h5 class="card-title">Card title</h5> -->
+                    
+                       <h6 class="card-subtitle mb-1"> <strong>Title</strong> {{meme_title}}</h6>
+                          <h6 class="card-subtitle mb-1"><strong>Tags </strong>{{meme_type}}</h6>
+                             <h6 class="card-subtitle mb-1"><strong>Description </strong>{{meme_description}}</h6>
+                             <h6  class="card-subtitle mb-1"><strong>Meme by </strong>{{meme_by}}</h6>
+                             <h6  style="text-align: right" class="card-subtitle mb-1"> <strong>Created At </strong>{{meme_createdAt}}</h6>
+                    {{!-- <p class="card-text">{{meme_title}}</p>
+                     <p class="">{{meme_type}}</p>
+                    <p class="">{{meme_description}}</p> --}}
+                </div>
+            </div>
+        </div>
+
+        {{/each}}
+
+        </div>

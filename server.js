@@ -93,10 +93,23 @@ app.get('/',(req,res)=>{
       console.log('allmeme',allMemes)
 
       const memeTrendTag = await AllMemeTT.find({})
+      const memeAtrending = await adminSetMTT.find({})
+  
+      const memeArray = []
+        /* Final data for array of trending memes*/
+
+      memeAtrending.map((one)=>{
+        memeArray.push(one.memeTrendSA)
+      })
+      const finalMemeArray = memeArray[0]
+      
+ console.log(memeArray)
+    
+
 
 
       res.render('homePage',{
-        allMemes,memeTrendTag
+        allMemes,memeTrendTag,finalMemeArray
       });
   } else {
       res.render('login', {
@@ -383,7 +396,10 @@ app.get('/memeUploadVideo',(req,res)=>{
   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
   const result = await cloudinary.uploader.upload(req.file.path);
-  const meme_createdAt = new Date().toJSON().slice(0, 10);
+
+  
+  // const meme_createdAt = new Date().toJSON().slice(0, 10);
+  const meme_createdAt=new Date().toLocaleDateString()
   const meme_image =result.secure_url;
   const email = req.session.session_email;
   const meme_title = req.body.title;
@@ -652,6 +668,25 @@ app.post('/selectMemeTrendS',(req,res)=>{
 
     
 })
+
+
+app.post('/memeTrendIndi', async(req,res)=>{
+  const memeTrend = req.body.memeTrend
+  console.log(memeTrend);
+
+  const allMemes = await MemeData.find({meme_trend:memeTrend})
+
+  console.log(allMemes);
+
+  res.render('memeTrendIndi',{
+    allMemes,memeTrend
+  })
+
+
+})
+
+
+
 
 const port = process.env.PORT || 3000;
 

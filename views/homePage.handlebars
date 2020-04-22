@@ -12,10 +12,25 @@
         <div class="spinner-grow text-secondary" role="status"></div>
     </div>
 
-    <div style="padding-top: 10px" id="appCapsule">
+    <div style="padding-top: 2px" id="appCapsule">
+<div class="section full mt-1">
+            <div class="section-title">Don't miss this!</div>
+            <div class="wide-block pt-2 pb-2">
+  {{#each finalMemeArray}}
+                <div class="chip">
+                    <form action="/memeTrendIndi" method="POST">
+                        <input type="hidden" name="memeTrend" value="{{this}}">
+                        <button type="submit" class="btn btn-primary">{{this}}</button type="submit">
+                     {{!-- <span class="chip-label">{{this}}</span> --}}
+                    </form>
 
+                </div>
+              
+{{/each}}
+            </div>
+        </div>
         <div  class="section full mb-3">
-             <div class="section-title">Memes that don't lie</div>
+             <div class="section-title">Memes don't lie</div>
 
             <div class="carousel-multiple owl-carousel owl-theme">
                 <div class="item">
@@ -48,14 +63,16 @@
 {{#each allMemes}}
         <div  class="section mt-2">
             <div class="card">
-                <img  src="{{meme_image}}" class="imaged img-fluid" alt="image">
+                
                 <div class="card-body">
+                    <h6  class="card-subtitle mb-1"><strong>Meme by </strong>{{meme_by}}</h6>
+                <img  src="{{meme_image}}" class="imaged img-fluid" alt="image">
                     <!-- <h5 class="card-title">Card title</h5> -->
                     
-                       <h6 class="card-subtitle mb-1"> <strong>Title</strong> {{meme_title}}</h6>
+                       <h6 style="margin-top: 5px" class="card-subtitle mb-1"> <strong>Title</strong> {{meme_title}}</h6>
                           <h6 class="card-subtitle mb-1"><strong>Tags </strong>{{meme_type}}</h6>
                              <h6 class="card-subtitle mb-1"><strong>Description </strong>{{meme_description}}</h6>
-                             <h6  class="card-subtitle mb-1"><strong>Meme by </strong>{{meme_by}}</h6>
+                             
                              <h6  style="text-align: right" class="card-subtitle mb-1"> <strong>Created At </strong>{{meme_createdAt}}</h6>
                     {{!-- <p class="card-text">{{meme_title}}</p>
                      <p class="">{{meme_type}}</p>
