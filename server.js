@@ -78,8 +78,29 @@ app.get('/',(req,res)=>{
     res.render('index')
   })
 
-  app.get('/notification',(req,res)=>{
-    res.render('notification')
+  app.get('/notification',async(req,res)=>{
+
+    const session_email = req.session.session_email;
+
+    const allMemes = await MemeUser.find({email:session_email}).sort({_id:-1})
+
+    var uploadedMemes= [];
+
+
+
+   
+
+    allMemes.map((one)=>{
+      uploadedMemes = one.user_memes
+    })
+
+    const  uploadedMemes1= uploadedMemes.reverse()
+
+    console.log(uploadedMemes)
+    // res.send(uploadedMemes)
+    res.render('notification',{
+      uploadedMemes1
+    })
   })
 
 
@@ -445,8 +466,12 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
     meme_createdAt
   })
   
+  /// redirecting to notification area
+
+  
   allMemes.save((result)=>{
-    res.redirect('/homePage'); 
+
+    res.redirect('/notification'); 
     console.log(result)
   })
 

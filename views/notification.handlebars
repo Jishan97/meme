@@ -1,1 +1,50 @@
-<h1>error</h1>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <div class="modal fade" role="dialog" id="imgmodal">
+
+    <div style="top:5%" class="modal-dialog">
+        <p>close</p>
+        <div class="modal-content"></div>          
+                    <img class="imaged w-100" src="" id="show-img">         
+        </div>
+    </div>
+  
+    {{#each uploadedMemes1}}
+   <div class="section mt-2">
+            <div class="card text-center">
+                <div class="card-header">
+                   Status: Uploaded
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{meme_title}}</h5>
+                    <p class="card-text">{{meme_description}}.</p>
+                      <div class="mb-1">
+                                    <style>
+                                    .imaged1{
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    transition: .5s linear
+                                    }
+                                    </style>
+                    <img src="{{meme_image}}" alt="image" class="imaged1">
+                </div>
+<p>click on meme to view in full screen</p>
+                    {{!-- <a href="#" class="btn btn-primary">View full meme</a> --}}
+                    <script>
+    $(document).ready(function(){
+        $(".imaged1").click(function(){
+           var img=$(this).attr('src');
+             $("#show-img").attr('src',img);
+             $("#imgmodal").modal('show');
+        });
+    });
+</script>
+                </div>
+                {{!-- <div class="card-footer text-muted">
+                    2 days ago
+                </div> --}}
+            </div>
+        </div>
+
+        {{/each}}
