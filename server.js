@@ -471,11 +471,11 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
   
   allMemes.save((result)=>{
 
-    res.redirect('/notification'); 
+   
     console.log(result)
   })
 
-
+  res.redirect('/notification'); 
   
 
   })
