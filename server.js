@@ -416,7 +416,7 @@ app.get('/memeUploadVideo',(req,res)=>{
   // uploading meme 
   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
-  const result = await cloudinary.uploader.upload(req.file.path);
+  const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
 
   
   // const meme_createdAt = new Date().toJSON().slice(0, 10);
