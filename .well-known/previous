@@ -1,0 +1,14 @@
+
+
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "xyz.appmaker.kvrmoe",
+        "sha256_cert_fingerprints": ["2F:E3:AB:99:DC:89:49:E0:6A:7D:A3:3F:47:62:F4:CE:B9:87:22:ED:EB:C1:06:AC:F6:08:EC:80:A7:92:C7:CA"]
+      }
+    }
+  ]
+
+  
