@@ -10,13 +10,27 @@
             border-radius: 50%
         }
     </style>
-        <img   src="assets/img/memePOPUP.png" alt="alt" class="imaged w-100">
-
+      
     <div id="loader">
         <div class="spinner-grow text-secondary" role="status"></div>
     </div>
+        <div class="appHeader" style="position: relative; z-index: 0;">
+                <div class="left">
+                  <a href="/joinUs" class="headerButton">
+                        <span class="btn btn-primary" >Join us</span>
+                    </a>
+                </div>
+                <div class="pageTitle"></div>
+                <div class="right">
+                    <a href="#" class="headerButton">
+                        <span class="btn btn-warning" data-toggle="modal" data-target="#DialogForm">Contact us</span>
+                    </a>
+                </div>
+            </div>
 
     <div style="padding-top: 2px" id="appCapsule">
+          <img   src="assets/img/memePOPUP.png" alt="alt" class="img-fluid">
+
 <div class="section full mt-1">
             <div class="section-title">Don't miss this!</div>
             <div class="wide-block pt-2 pb-2">
@@ -24,7 +38,7 @@
                 <div class="chip">
                     <form action="/memeTrendIndi" method="POST">
                         <input type="hidden" name="memeTrend" value="{{this}}">
-                        <button type="submit" class="btn btn-primary">{{this}}</button type="submit">
+                        <button type="submit" class="btn btn-dark">{{this}}</button type="submit">
                      {{!-- <span class="chip-label">{{this}}</span> --}}
                     </form>
 
@@ -38,7 +52,7 @@
 
             <div class="carousel-multiple owl-carousel owl-theme">
                 <div class="item">
-                    <a href="/dankMemes"> <img style=" " src="assets/img/sample/photo/1.jpg" alt="alt" class="imaged imaged1 w-100">
+                    <a href="/dankMemes"> <img style=" " src="assets/img/sample/photo/1.jpg" alt="alt" class="imaged imaged1 w-">
                      <p style="margin-left: 5px;font-size:90%">Dank memes  &#8594; </p>
                      </a>
                    
@@ -47,17 +61,17 @@
                     {{!-- -webkit-box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75);
                     -moz-box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75);
                     box-shadow: 10px 10px 53px -27px rgba(0,0,0,0.75); --}}
-                    <a href="/indianMemes"> <img  style="" src="assets/img/sample/photo/2.jpg" alt="alt" class="imaged imaged1 w-100">
+                    <a href="/indianMemes"> <img  style="" src="assets/img/sample/photo/2.jpg" alt="alt" class="imaged imaged1 w-">
                     <p style="margin-left: 5px;font-size:90%">Indian memes &#8594;</p></a>
                    
                 </div>
                 <div class="item">
-                    <a href="/funnyMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged imaged1 w-100">
+                    <a href="/funnyMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged imaged1 w-">
                     <p style="margin-left: 5px;font-size:90%">Funny memes &#8594;</p></a>
                    
                 </div>
                   <div class="item">
-                    <a href="/adultMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged imaged1 w-100">
+                    <a href="/adultMemes"> <img  style="" src="assets/img/sample/photo/3.jpg" alt="alt" class="imaged imaged1 w-">
                     <p style="margin-left: 5px;font-size:90%">Adult memes &#8594;</p></a>
                    
                 </div>
@@ -91,6 +105,42 @@
 
 
     </div>
+
+
+    {{!-- // contact us  --}}
+
+       <div class="modal fade dialogbox" id="DialogForm" data-backdrop="static" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Please tell us if there is any issues you are facing in the app</h5>
+                    </div>
+                    <form>
+                        <div class="modal-body text-left mb-2">
+                            <div class="form-group basic">
+                                <div class="input-wrapper">
+                                    <label class="label" for="email1">E-mail</label>
+                                    <input type="email" class="form-control" id="email1" placeholder="Enter an e-mail">
+                                    <i class="clear-input icon ion-ios-close-circle"></i>
+                                </div>
+                            </div>
+                          <div class="form-group">
+    <label for="exampleFormControlTextarea1">Why you want to join us</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-inline">
+                                <button type="button" class="btn btn-text-secondary" data-dismiss="modal">CLOSE</button>
+                                <button type="button" class="btn btn-text-primary" data-dismiss="modal">SUBMIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 <script>
 
  setTimeout(function() {

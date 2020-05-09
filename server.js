@@ -10,6 +10,7 @@ var {adminSetMTT} = require('./model/adminSetMTT');
 
 
 var {AllMemeTT} = require('./model/AllMemeTT')
+
 const upload = require('./multer');
 const path = require('path');
 const crypto = require('crypto');
@@ -70,7 +71,7 @@ app.use(bodyParser.json()).use(bodyParser.urlencoded({
   
 
 app.get('/',(req,res)=>{
-  res.render('register')
+  res.render('login')
 })
 
 
@@ -80,6 +81,7 @@ app.get('/',(req,res)=>{
 
   app.get('/notification',async(req,res)=>{
 
+      if(req.user){
     const session_email = req.session.session_email;
 
     const allMemes = await MemeUser.find({email:session_email}).sort({_id:-1})
@@ -101,6 +103,16 @@ app.get('/',(req,res)=>{
     res.render('notification',{
       uploadedMemes1
     })
+
+  }
+
+  
+  else {
+    res.render('login', {
+        message: 'Please login to continue',
+        messageClass: 'alert-danger'
+    });
+}
   })
 
 
@@ -132,7 +144,8 @@ app.get('/',(req,res)=>{
       res.render('homePage',{
         allMemes,memeTrendTag,finalMemeArray
       });
-  } else {
+  } 
+  else {
       res.render('login', {
           message: 'Please login to continue',
           messageClass: 'alert-danger'
@@ -148,11 +161,21 @@ app.get('/',(req,res)=>{
 
 
   app.get('/memeUpload',(req,res)=>{
+    if (req.user){
     res.render('memeUpload')
+    }
+    
+  else {
+    res.render('login', {
+        message: 'Please login to continue',
+        messageClass: 'alert-danger'
+    });
+}
+  
   })
 
   app.get('/memeUpload2', async(req,res)=>{
-
+if(req.user){
     const memeTag = await AllMemeTT.find({memeTT:'memeTag'})
     const memeTrend = await AllMemeTT.find({memeTT:'memeTrend'})
 
@@ -160,6 +183,15 @@ app.get('/',(req,res)=>{
     res.render('memeUpload2',{
       memeTag,memeTrend
     })
+  }
+
+    
+  else {
+    res.render('login', {
+        message: 'Please login to continue',
+        messageClass: 'alert-danger'
+    });
+}
   })
 
 
@@ -169,6 +201,7 @@ app.get('/',(req,res)=>{
 
 
   app.get('/trendingPage', async(req,res)=>{
+    if(req.user){
     const mainD = await MemeData.find({})
     const memeAtrending = await adminSetMTT.find({})
   
@@ -210,6 +243,16 @@ app.get('/',(req,res)=>{
     res.render('trendingPage',{
       finalMemeArray,finalMemeSingle
     })
+
+  }
+
+  
+  else {
+    res.render('login', {
+        message: 'Please login to continue',
+        messageClass: 'alert-danger'
+    });
+}
   })
 
   app.get('/register', (req, res) => {
@@ -218,6 +261,7 @@ app.get('/',(req,res)=>{
 
 
 app.get('/profile', async(req, res) => {
+  if(req.user){
   const session_email = req.session.session_email;
   const data = await MemeUser.find({email:session_email})
   console.log('session email',session_email)
@@ -237,6 +281,14 @@ app.get('/profile', async(req, res) => {
   res.render('profile',{
     data,totalMeme
   });
+}
+
+else {
+  res.render('login', {
+      message: 'Please login to continue',
+      messageClass: 'alert-danger'
+  });
+}
 });
 
 
@@ -409,76 +461,74 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 
-app.get('/memeUploadVideo',(req,res)=>{
-  res.render('memeUploadVideo')
-})
+
 
   // uploading meme 
-  app.post('/memeUpload',upload.single('image'), async(req,res)=>{
+//   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
-  const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-
-  
-  // const meme_createdAt = new Date().toJSON().slice(0, 10);
-  const meme_createdAt=new Date().toLocaleDateString()
-  const meme_image =result.secure_url;
-  const email = req.session.session_email;
-  const meme_title = req.body.title;
-  const meme_description = req.body.description;
-  const meme_type = req.body.type;
-  const meme_by = req.session.session_email;
-  const meme_trend = req.body.trend;
-
-
-
-  console.log('session username',email)
-  console.log('image url',meme_image)
-
- var memeD = {
-  meme_image,
-  meme_title,
-  meme_description,
-  meme_type,
-  meme_trend,
-  meme_createdAt
-  
-  
-  }
-
-
-MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
-.then((url)=>{
-    console.log(url);
-  
-    // res.send(url)
-  }).catch(e=>console.log(e))
+//   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
 
   
+//   // const meme_createdAt = new Date().toJSON().slice(0, 10);
+//   const meme_createdAt=new Date().toLocaleDateString()
+//   const meme_image =result.secure_url;
+//   const email = req.session.session_email;
+//   const meme_title = req.body.title;
+//   const meme_description = req.body.description;
+//   const meme_type = req.body.type;
+//   const meme_by = req.session.session_email;
+//   const meme_trend = req.body.trend;
 
 
-  const allMemes = new MemeData({
-    meme_image,
-    meme_title,
-    meme_description,
-    meme_type,
-    meme_by,
-    meme_trend,
-    meme_createdAt
-  })
+
+//   console.log('session username',email)
+//   console.log('image url',meme_image)
+
+//  var memeD = {
+//   meme_image,
+//   meme_title,
+//   meme_description,
+//   meme_type,
+//   meme_trend,
+//   meme_createdAt
   
-  /// redirecting to notification area
+  
+//   }
+
+
+// MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
+// .then((url)=>{
+//     console.log(url);
+  
+//     // res.send(url)
+//   }).catch(e=>console.log(e))
 
   
-  allMemes.save((result)=>{
+
+
+//   const allMemes = new MemeData({
+//     meme_image,
+//     meme_title,
+//     meme_description,
+//     meme_type,
+//     meme_by,
+//     meme_trend,
+//     meme_createdAt
+//   })
+  
+//   /// redirecting to notification area
+
+  
+//   allMemes.save((result)=>{
 
    
-    console.log(result)
-  })
+//     console.log(result)
+//   })
 
-  res.redirect('/notification'); 
+//   res.redirect('/notification'); 
   
 
-  })
+//   })
 
 
 
@@ -513,6 +563,8 @@ app.get('/funnyMemes',async(req,res)=>{
   })
 })
 
+
+//// /////////////////////////////////////////////////////////////////////////admin side to control all the meme trend
 app.get('/setMemeTrend',async(req,res)=>{
   const data = await AllMemeTT.find({}).sort({_id:-1})
   const data1 = await AllMemeTT.find({memeTT:'memeTrend'})
@@ -711,7 +763,9 @@ app.post('/memeTrendIndi', async(req,res)=>{
 })
 
 
-
+app.get('/joinUs',(req,res)=>{
+  res.render('joinUs')
+})
 
 const port = process.env.PORT || 3000;
 
