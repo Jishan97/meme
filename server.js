@@ -464,71 +464,71 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
   // uploading meme 
-//   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
+  app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
-//   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-
-  
-//   // const meme_createdAt = new Date().toJSON().slice(0, 10);
-//   const meme_createdAt=new Date().toLocaleDateString()
-//   const meme_image =result.secure_url;
-//   const email = req.session.session_email;
-//   const meme_title = req.body.title;
-//   const meme_description = req.body.description;
-//   const meme_type = req.body.type;
-//   const meme_by = req.session.session_email;
-//   const meme_trend = req.body.trend;
-
-
-
-//   console.log('session username',email)
-//   console.log('image url',meme_image)
-
-//  var memeD = {
-//   meme_image,
-//   meme_title,
-//   meme_description,
-//   meme_type,
-//   meme_trend,
-//   meme_createdAt
-  
-  
-//   }
-
-
-// MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
-// .then((url)=>{
-//     console.log(url);
-  
-//     // res.send(url)
-//   }).catch(e=>console.log(e))
+  const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
 
   
+  // const meme_createdAt = new Date().toJSON().slice(0, 10);
+  const meme_createdAt=new Date().toLocaleDateString()
+  const meme_image =result.secure_url;
+  const email = req.session.session_email;
+  const meme_title = req.body.title;
+  const meme_description = req.body.description;
+  const meme_type = req.body.type;
+  const meme_by = req.session.session_email;
+  const meme_trend = req.body.trend;
 
 
-//   const allMemes = new MemeData({
-//     meme_image,
-//     meme_title,
-//     meme_description,
-//     meme_type,
-//     meme_by,
-//     meme_trend,
-//     meme_createdAt
-//   })
+
+  console.log('session username',email)
+  console.log('image url',meme_image)
+
+ var memeD = {
+  meme_image,
+  meme_title,
+  meme_description,
+  meme_type,
+  meme_trend,
+  meme_createdAt
   
-//   /// redirecting to notification area
+  
+  }
+
+
+MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
+.then((url)=>{
+    console.log(url);
+  
+    // res.send(url)
+  }).catch(e=>console.log(e))
 
   
-//   allMemes.save((result)=>{
+
+
+  const allMemes = new MemeData({
+    meme_image,
+    meme_title,
+    meme_description,
+    meme_type,
+    meme_by,
+    meme_trend,
+    meme_createdAt
+  })
+  
+  /// redirecting to notification area
+
+  
+  allMemes.save((result)=>{
 
    
-//     console.log(result)
-//   })
+    console.log(result)
+  })
 
-//   res.redirect('/notification'); 
+  res.redirect('/notification'); 
   
 
-//   })
+  })
 
 
 
