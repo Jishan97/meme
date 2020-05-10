@@ -8574,12 +8574,15 @@ a.badge-dark {
   background: #0ad561; }
 
 .btn-primary {
-  background: #006FFF !important;
-  border-color: #006FFF !important;
+  background: #006fff00 !important;
+  border-color: #FFFFFF !important;
   color: #FFFFFF !important; }
+
+
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
     background: #0064e6 !important;
     border-color: #0064e6 !important; }
+
   .btn-primary.disabled, .btn-primary:disabled {
     background: #006FFF;
     border-color: #006FFF;

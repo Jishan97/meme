@@ -39,6 +39,15 @@
     </div>
 </div> --}}
 <style>
+        body{
+        color:black;
+        background: rgb(238,174,202);
+background: -moz-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+background: -webkit-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eeaeca",endColorstr="#94bbe9",GradientType=1);   
+
+    }
     .alert-danger, .alert-success{
         margin: 10px;
         transition: .5s linear
@@ -101,7 +110,7 @@
                     </div>
                 </div>
 
-                <div style="position:relative" class="form-button-group">
+                <div style="position:relative;background:none" class="form-button-group">
                     <button type="submit" class="btn btn-primary btn-block btn-lg">Register</button>
                 </div>
                 <p>Have account? <a href="/login">Login</a> </p>
