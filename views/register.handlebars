@@ -43,6 +43,13 @@
         margin: 10px;
         transition: .5s linear
     }
+        
+    .mainC{
+  display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    }
 </style>
    {{#if message}}
             <div class="alert {{messageClass}}" role="alert">
@@ -50,8 +57,8 @@
             </div>
         {{/if}}
 
-
-        <div class="section mt-2 mb-5">
+<div class="mainC">
+  <div class="section mt-2 mb-5">
                 <h2 style="text-align: center">Register!</h2>
             <form action="/register" method="POST">
 
@@ -101,3 +108,5 @@
 
             </form>
         </div>
+</div>
+      

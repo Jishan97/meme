@@ -28,6 +28,12 @@
         margin: 10px;
         transition: .5s linear
     }
+    .mainC{
+  display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    }
 </style>
 
    {{#if message}}
@@ -37,7 +43,10 @@
         {{/if}}
 
 
-        <div class="section mt-2 mb-5">
+
+
+<div class="mainC">
+    <div class="section mt-2 mb-5">
                 <h2 style="text-align: center">LOGIN</h2>
             <form action="/login" method="POST">
 
@@ -66,3 +75,6 @@
 
             </form>
         </div>
+
+</div>
+    
