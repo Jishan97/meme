@@ -71,8 +71,17 @@ app.use(bodyParser.json()).use(bodyParser.urlencoded({
   
 
 app.get('/',(req,res)=>{
-  res.render('login')
-})
+  if(req.user){
+
+    res.render('login')
+  }
+
+  else {
+    res.redirect('/homePage')
+}
+
+
+  })
 
 
   app.get('/index',(req,res)=>{
