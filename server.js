@@ -73,11 +73,15 @@ app.use(bodyParser.json()).use(bodyParser.urlencoded({
 app.get('/',(req,res)=>{
   if(req.user){
 
-    res.render('login')
+    res.redirect('/homePage')
   }
 
   else {
-    res.redirect('/homePage')
+    res.render('login', {
+      message: 'Please login to continue',
+      messageClass: 'alert-danger'
+  });
+
 }
 
 
