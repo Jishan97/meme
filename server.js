@@ -71,19 +71,9 @@ app.use(bodyParser.json()).use(bodyParser.urlencoded({
   
 
 app.get('/',(req,res)=>{
-  if(req.user){
+
 
     res.redirect('/homePage')
-  }
-
-  else {
-    res.render('login', {
-      message: 'Please login to continue',
-      messageClass: 'alert-danger'
-  });
-
-}
-
 
   })
 
