@@ -7,6 +7,7 @@ var {mongoose} = require('./db/mongoose');
 var {MemeUser} = require('./model/memeUser');
 var {MemeData} = require('./model/memeCollection');
 var {adminSetMTT} = require('./model/adminSetMTT');
+var {contactUs} = require('./model/contactUs');
 
 
 var {AllMemeTT} = require('./model/AllMemeTT')
@@ -18,6 +19,10 @@ const cookieParser = require('cookie-parser');
 const authTokens = {};
 var session = require('express-session');
 var serveIndex = require('serve-index');
+const checkNet = require("./middleware");
+
+
+
 
 app.use(session({
   secret: "Shh, its a secret!"
@@ -68,7 +73,10 @@ app.use(bodyParser.json()).use(bodyParser.urlencoded({
   app.use(express.static(__dirname + '/public'));
   
 
-  
+  app.use(checkNet)
+
+
+
 
 app.get('/',(req,res)=>{
 
@@ -765,6 +773,21 @@ app.post('/memeTrendIndi', async(req,res)=>{
 
 })
 
+
+app.post('/admin/contactUs', async(req,res)=>{
+  const email = req.body.email;
+  const msg = req.body.msg;
+
+
+  var data = new contactUs({
+    email,msg
+  })
+
+   const responseD = await data.save();
+   console.log(responseD)
+   res.redirect('/homePage')
+
+})
 
 app.get('/joinUs',(req,res)=>{
   res.render('joinUs')
