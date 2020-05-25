@@ -19,6 +19,8 @@
     "check-internet-connected": "^2.0.5",
     "cloudinary": "^1.21.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "expo-server-sdk": "^3.5.0",
     "express": "^4.17.1",
     "express-flash-message": "^1.0.5",
     "express-handlebars": "^3.1.0",

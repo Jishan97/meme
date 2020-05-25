@@ -8,9 +8,15 @@ var {MemeUser} = require('./model/memeUser');
 var {MemeData} = require('./model/memeCollection');
 var {adminSetMTT} = require('./model/adminSetMTT');
 var {contactUs} = require('./model/contactUs');
-
-
+var {expoID} = require('./model/expoID');
 var {AllMemeTT} = require('./model/AllMemeTT')
+
+const { Expo } = require("expo-server-sdk");
+const expo = new Expo();
+const cors = require("cors");
+app.use(cors());
+
+
 
 const upload = require('./multer');
 const path = require('path');
@@ -128,30 +134,59 @@ app.get('/',(req,res)=>{
 
 
 
-  
-  app.get('/homePage',async(req,res)=>{
-    console.log('opening home page')
-    if (req.user) {
 
-      const allMemes = await MemeData.find().sort({_id:-1})
-      console.log('allmeme',allMemes)
 
-      const memeTrendTag = await AllMemeTT.find({})
-      const memeAtrending = await adminSetMTT.find({})
-  
-      const memeArray = []
-        /* Final data for array of trending memes*/
+  app.get('/getAllMemes',(req,res)=>{
 
-      memeAtrending.map((one)=>{
-        memeArray.push(one.memeTrendSA)
-      })
-      const finalMemeArray = memeArray[0]
-      
- console.log(memeArray)
     
 
+  })
 
 
+
+
+
+  // -------------------------   POST  ALL MEMES GET REQUEST  start -------------------------
+
+
+  app.post('/getAllmemes',async(req,res)=>{
+    // get username or email from front end local storage or session or chace 
+    const username = req.body.username;
+    if(username){
+      try {
+        const allMemes = await MemeData.find().sort({_id:-1});
+        res.json(allMemes)
+      } catch (error) {
+          console.log(error.message)
+      }
+    } 
+    else{ 
+      // not login
+      res.json({msg:'You are not logged in'})
+    }
+  })
+
+
+
+    // -------------------------   POST  ALL MEMES GET REQUEST  end -------------------------
+  
+
+
+  app.get('/homePage',async(req,res)=>{
+
+    console.log('opening home page')
+    if (req.user) {
+      const allMemes = await MemeData.find().sort({_id:-1})
+      console.log('allmeme',allMemes)
+      const memeTrendTag = await AllMemeTT.find({})
+      const memeAtrending = await adminSetMTT.find({})
+      const memeArray = []
+        /* Final data for array of trending memes*/
+      memeAtrending.map((one)=>{
+      memeArray.push(one.memeTrendSA)
+      })
+      const finalMemeArray = memeArray[0]
+      console.log(memeArray)
       res.render('homePage',{
         allMemes,memeTrendTag,finalMemeArray
       });
@@ -169,6 +204,17 @@ app.get('/',(req,res)=>{
   //       });
 
 });
+
+
+
+
+
+
+
+
+
+
+
 
 
   app.get('/memeUpload',(req,res)=>{
@@ -478,8 +524,8 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
   app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-
   
+  console.log(req.file.path)
   // const meme_createdAt = new Date().toJSON().slice(0, 10);
   const meme_createdAt=new Date().toLocaleDateString()
   const meme_image =result.secure_url;
@@ -509,7 +555,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 .then((url)=>{
-    console.log(url);
+    // console.log(url);
   
     // res.send(url)
   }).catch(e=>console.log(e))
@@ -533,7 +579,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
   allMemes.save((result)=>{
 
    
-    console.log(result)
+    // console.log(result)
   })
 
   res.redirect('/notification'); 
@@ -792,6 +838,100 @@ app.post('/admin/contactUs', async(req,res)=>{
 app.get('/joinUs',(req,res)=>{
   res.render('joinUs')
 })
+
+
+
+
+// push notification expo 
+
+app.post('/expoPush',async(req,res)=>{
+  const fetchedData = await expoID.find({})
+  let expoIDdata = req.body.expoID;
+
+  fetchedData.map((one)=>{
+    if(one.expoid !=expoIDdata) {
+      var data = new expoID({
+        expoid:expoIDdata
+      })
+    
+         data.save().then((savedD)=>{
+           console.log(savedD)
+         })
+       console.log(expoIDdata);
+   
+    }
+    else{
+      console.log(`Device's expoID already present`)
+    }
+  })
+
+  
+
+
+})
+
+
+
+
+app.post('/sendPushNotification',async(req,res)=>{
+
+const data = await expoID.find({})
+let title = req.body.title;
+let body = req.body.body1
+let expoIDs = [];
+
+data.map((one)=>{
+  expoIDs.push(one.expoid)
+})
+
+console.log(expoIDs)
+
+let notifications = [];
+  for (let pushToken of expoIDs) {
+    if (!Expo.isExpoPushToken(pushToken)) {
+      console.error(`Push token ${pushToken} is not a valid Expo push token`);
+      continue;
+    }
+
+    notifications.push({
+      to: pushToken,
+      sound: "default",
+      title: title,
+      body: body,
+      data: { body }
+    });
+  }
+
+  let chunks = expo.chunkPushNotifications(notifications);
+
+  (async () => {
+    for (let chunk of chunks) {
+      try {
+        let receipts = await expo.sendPushNotificationsAsync(chunk);
+        console.log(receipts);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  })();
+
+  res.redirect('/setMemeTrend')
+  
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 const port = process.env.PORT || 3000;
 
