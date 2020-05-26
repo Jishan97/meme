@@ -147,8 +147,6 @@ app.get('/',(req,res)=>{
 
 
   // -------------------------   POST  ALL MEMES GET REQUEST  start -------------------------
-
-
   app.post('/getAllmemes',async(req,res)=>{
     // get username or email from front end local storage or session or chace 
     const username = req.body.username;
@@ -165,12 +163,12 @@ app.get('/',(req,res)=>{
       res.json({msg:'You are not logged in'})
     }
   })
-
-
-
     // -------------------------   POST  ALL MEMES GET REQUEST  end -------------------------
   
 
+
+
+    
 
   app.get('/homePage',async(req,res)=>{
 
@@ -593,6 +591,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
 
 // Dank memes 
 
+
 app.get('/dankMemes',async(req,res)=>{
 
   const allMemes = await MemeData.find({meme_type:'#dank'})
@@ -601,6 +600,34 @@ app.get('/dankMemes',async(req,res)=>{
     allMemes
   })
 })
+
+/////////////////////////////////////////////////////////////////////////////////  GET  Memes
+app.get('/GetdankMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#dank'})
+  res.json(allMemes)
+})
+
+app.get('/GetindianMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#indian'})
+  res.json(allMemes)
+})
+
+app.get('/GetfunnyMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#funny'})
+  res.json(allMemes)
+})
+
+app.get('/GetadultMemes',async(req,res)=>{
+
+  const allMemes = await MemeData.find({meme_type:'#adult'})
+  res.json(allMemes)
+})
+/////////////////////////////////////////////////////////////////////////////////  GET  Memes
+
+
 
 app.get('/indianMemes',async(req,res)=>{
 
