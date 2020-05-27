@@ -516,7 +516,7 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 app.post('/imageUploadTrial',upload.single('image'), async(req,res)=>{
-  // console.log(req.file.path);
+  console.log(req.file);
   // try{
     
   //   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
