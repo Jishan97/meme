@@ -516,17 +516,19 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 app.post('/imageUploadTrial',upload.single('image'), async(req,res)=>{
-  console.log(req.file.path);
-  try{
+  // console.log(req.file.path);
+  // try{
     
-    const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-    // console.log(req.file);
+  //   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
+  //   // console.log(req.file);
   
-    res.json(result)
-  }
-  catch(e){
-    console.log(e);
-  }
+  //   res.json(result)
+  // }
+  // catch(e){
+  //   console.log(e);
+  // }
+
+  console.log('HELLOoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
   
 
 
