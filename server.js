@@ -515,6 +515,18 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 
+app.post('/imageUploadTrial',upload.single('image'), async(req,res)=>{
+
+
+  const result = await cloudinary.uploader.upload(req.body.imageURL,{quality: "auto", fetch_format: "auto"});
+  console.log(result.secure_url);
+
+  res.json(result)
+
+
+})
+
+
 
 
 
@@ -605,7 +617,9 @@ app.get('/dankMemes',async(req,res)=>{
 app.get('/GetdankMemes',async(req,res)=>{
 
   const allMemes = await MemeData.find({meme_type:'#dank'})
+  
   res.json(allMemes)
+
 })
 
 app.get('/GetindianMemes',async(req,res)=>{
