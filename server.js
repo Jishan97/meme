@@ -13,8 +13,7 @@ var {AllMemeTT} = require('./model/AllMemeTT')
 
 const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
-const cors = require("cors");
-app.use(cors());
+
 
 
 
@@ -28,7 +27,8 @@ var serveIndex = require('serve-index');
 const checkNet = require("./middleware");
 
 
-
+var cors = require('cors');
+app.use(cors());
 
 app.use(session({
   secret: "Shh, its a secret!"
@@ -248,6 +248,29 @@ if(req.user){
     });
 }
   })
+
+
+  app.get('/memeTags',async(req,res)=>{
+    const memeTag = await AllMemeTT.find({memeTT:'memeTag'})
+    console.log(memeTag);
+    res.json(memeTag)
+
+  })
+
+  app.get('/memeTrends',async(req,res)=>{
+    const memeTrend = await AllMemeTT.find({memeTT:'memeTrend'})
+    console.log(memeTrend);
+    res.json(memeTrend)
+
+  })
+
+
+
+
+
+
+
+
 
 
   app.get('/memeS',(req,res)=>{
@@ -515,22 +538,21 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 
-app.post('/imageUploadTrial',upload.single('image'), async(req,res)=>{
+app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
+  // // console.log(req.body.imageData);
   console.log(req.file);
   try{
     
-    const result = await cloudinary.uploader.upload(req.file,{quality: "auto", fetch_format: "auto"});
+    const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
     // console.log(req.file);
-  
+    console.log(result.secure_url);
     res.json(result)
   }
   catch(e){  
     console.log(e);
   }
-
-  console.log('HELLOoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-  
-
+  // console.log('HELLOoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+  console.log(req.file.path)
 
 })
 
@@ -539,7 +561,7 @@ app.post('/imageUploadTrial',upload.single('image'), async(req,res)=>{
 
 
   // uploading meme 
-  app.post('/memeUpload',upload.single('image'), async(req,res)=>{
+  app.post('/memeUpload',upload.single('imageData'), async(req,res)=>{
 
   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
   
