@@ -561,7 +561,7 @@ app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
 
 
   // uploading meme 
-  app.post('/memeUpload',upload.single('imageData'), async(req,res)=>{
+  app.post('/memeUpload',upload.single('image'), async(req,res)=>{
 
   const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
   
