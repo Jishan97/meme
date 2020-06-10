@@ -317,7 +317,7 @@ if(req.user){
 
  //  GET Request trending contents --- Single meme trends -----------------------------------------------------
 
- app.get('/getTrendingMemesSingle',(req,res)=>{
+ app.get('/getTrendingMemesSingle',async(req,res)=>{
   const mainD = await MemeData.find({})
 
   const memeAtrending = await adminSetMTT.find({})
