@@ -12,10 +12,6 @@ const userschema = new Schema({
     password:{
         type:String
     },
-    prefrences:{
-        type:String
-    },
-    
     gender:{
         type:String
     },
@@ -24,17 +20,19 @@ const userschema = new Schema({
         type:String
     },
     
-    prefrences:{
-        type:String
-    },
+    prefrences:[
+    ],
     
     user_tag:{
         type:String
     },
     
-    user_achivement:{
-        type:String
-    },
+    user_achivements:[
+        {
+            title:{type:String},
+            body:{type:String}
+        }
+    ],
     
     user_status:{
         type:String

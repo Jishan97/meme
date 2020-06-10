@@ -278,9 +278,83 @@ if(req.user){
   })
 
 
+
+
+
+
+
+
+
+  //  GET Request trending contents --- Array of trends -----------------------------------------------------
+
+  app.get('/getTrendingMemesArray',async(req,res)=>{
+    const mainD = await MemeData.find({})
+    
+    const memeAtrending = await adminSetMTT.find({})
+  
+    const memeArray = []
+    const finalMemeArray = []   /* Final data for array of trending memes*/
+
+    memeAtrending.map((one)=>{
+      memeArray.push(one.memeTrendSA)
+    })
+    memeArray[0].map((one)=>{
+      mainD.map((two)=>{
+        if(two.meme_trend == one){ 
+          finalMemeArray.push(two)
+        }
+      })
+    })
+    console.log(memeArray)
+    res.json(finalMemeArray)
+
+  })
+
+  //  GET Request trending contents --- Array of trends ---------------------------------------------------------------
+
+
+
+
+ //  GET Request trending contents --- Single meme trends -----------------------------------------------------
+
+ app.get('/getTrendingMemesSingle',(req,res)=>{
+  const mainD = await MemeData.find({})
+
+  const memeAtrending = await adminSetMTT.find({})
+
+  const singleMeme=[]
+  const finalMemeSingle = []  /* final data for single trendig meme */
+  memeAtrending.map((one)=>{
+    singleMeme.push(one.memeTrendS)
+  })
+  
+  singleMeme.map((one)=>{
+    mainD.map((two)=>{
+      if(two.meme_trend == one){
+        finalMemeSingle.push(two)
+      }
+    })
+  })
+
+  res.json(finalMemeSingle)
+ })
+
+
+ 
+
+
+
+ //  GET Request trending contents --- Single meme trends -----------------------------------------------------
+
+
+
+
+
+
   app.get('/trendingPage', async(req,res)=>{
     if(req.user){
     const mainD = await MemeData.find({})
+
     const memeAtrending = await adminSetMTT.find({})
   
     const memeArray = []
@@ -539,12 +613,15 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
 
 
 app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
+  console.log('getting req');
   // // console.log(req.body.imageData);
-  console.log(req.file);
+  // console.log(req.title);
+  console.log('Title',req.body.title)
+  console.log('Title',req.body.description)
   try{
     
     const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-    // console.log(req.file);
+    console.log(req.body);
     console.log(result.secure_url);
     res.json(result)
   }
