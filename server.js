@@ -305,7 +305,7 @@ if(req.user){
         }
       })
     })
-    console.log(memeArray)
+    console.log(finalMemeArray)
     res.json(finalMemeArray)
 
   })
@@ -336,7 +336,8 @@ if(req.user){
     })
   })
 
-  res.json(finalMemeSingle)
+  res.send(finalMemeSingle)
+  console.log(finalMemeSingle)
  })
 
 
@@ -616,13 +617,59 @@ app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
   console.log('getting req');
   // // console.log(req.body.imageData);
   // console.log(req.title);
-  console.log('Title',req.body.title)
-  console.log('Title',req.body.description)
+  // console.log('Title',req.body.title)
+  // console.log('Title',req.body.description)
   try{
     
     const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-    console.log(req.body);
-    console.log(result.secure_url);
+    const meme_createdAt=new Date().toLocaleDateString()
+    const meme_image =result.secure_url;
+    const email = req.session.username;
+    const meme_title = req.body.title;
+    const meme_description = req.body.description;
+    const meme_type = req.body.type;
+    const meme_by = req.session.username;
+    // const meme_trend = req.body.trend;
+    var memeD = {
+      meme_image,
+      meme_title,
+      meme_description,
+      meme_type,
+      // meme_trend,
+      meme_createdAt
+      
+      
+      }
+    
+    
+    MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
+    .then((url)=>{
+        // console.log(url);
+      
+        // res.send(url)
+      }).catch(e=>console.log(e))
+    
+      const allMemes = new MemeData({
+        meme_image,
+        meme_title,
+        meme_description,
+        meme_type,
+        meme_by,
+        // meme_trend,
+        meme_createdAt
+      })
+      
+      /// redirecting to notification area
+    
+      
+      allMemes.save((result)=>{
+    
+       
+        // console.log(result)
+      })
+
+
+    
     res.json(result)
   }
   catch(e){  
@@ -631,10 +678,13 @@ app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
   // console.log('HELLOoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
   console.log(req.file.path)
 
+
+
+
 })
 
 
-
+ 
 
 
   // uploading meme 
