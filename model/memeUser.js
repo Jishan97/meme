@@ -37,6 +37,9 @@ const userschema = new Schema({
     user_status:{
         type:String
     },
+    user_avatar:{
+        type:String
+    },
 
     user_memes:[
         {

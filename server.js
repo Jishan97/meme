@@ -1,701 +1,626 @@
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
-const exphbs = require('express-handlebars')
-const cloudinary = require('cloudinary').v2;   
-var {mongoose} = require('./db/mongoose');
-var {MemeUser} = require('./model/memeUser');
-var {MemeData} = require('./model/memeCollection');
-var {adminSetMTT} = require('./model/adminSetMTT');
-var {contactUs} = require('./model/contactUs');
-var {expoID} = require('./model/expoID');
-var {AllMemeTT} = require('./model/AllMemeTT')
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+const exphbs = require("express-handlebars");
+const cloudinary = require("cloudinary").v2;
+var { mongoose } = require("./db/mongoose");
+var { MemeUser } = require("./model/memeUser");
+var { MemeData } = require("./model/memeCollection");
+var { adminSetMTT } = require("./model/adminSetMTT");
+var { contactUs } = require("./model/contactUs");
+var { expoID } = require("./model/expoID");
+var { AllMemeTT } = require("./model/AllMemeTT");
 
 const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
 
-
-
-
-const upload = require('./multer');
-const path = require('path');
-const crypto = require('crypto');
-const cookieParser = require('cookie-parser');
+const upload = require("./multer");
+const path = require("path");
+const crypto = require("crypto");
+const cookieParser = require("cookie-parser");
 const authTokens = {};
-var session = require('express-session');
-var serveIndex = require('serve-index');
+var session = require("express-session");
+var serveIndex = require("serve-index");
 const checkNet = require("./middleware");
 
-
-var cors = require('cors');
+var cors = require("cors");
 app.use(cors());
 
-app.use(session({
-  secret: "Shh, its a secret!"
-}));
+app.use(
+  session({
+    secret: "Shh, its a secret!"
+  })
+);
 
-app.use('/.well-known', express.static('.well-known'), serveIndex('.well-known'));
+app.use(
+  "/.well-known",
+  express.static(".well-known"),
+  serveIndex(".well-known")
+);
 
+require("./cloudinary");
 
-require('./cloudinary')
-
-const getHashedPassword = (password) => {
-  const sha256 = crypto.createHash('sha256');
-  const hash = sha256.update(password).digest('base64');
+const getHashedPassword = password => {
+  const sha256 = crypto.createHash("sha256");
+  const hash = sha256.update(password).digest("base64");
   return hash;
-}
+};
 
 const generateAuthToken = () => {
-  return crypto.randomBytes(30).toString('hex');
-}
+  return crypto.randomBytes(30).toString("hex");
+};
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-    const authToken = req.cookies['AuthToken'];
-    req.user = authTokens[authToken];
-    next();
+  const authToken = req.cookies["AuthToken"];
+  req.user = authTokens[authToken];
+  next();
 });
 
-
-
-app.use(bodyParser.json()).use(bodyParser.urlencoded({
+app.use(bodyParser.json()).use(
+  bodyParser.urlencoded({
     extended: true
-  }))
-  
-  app.engine('handlebars', exphbs({
-  
-    defaultLayout: 'main',
+  })
+);
+
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main"
     // helpers: require('./helpers')
-  }))
-  
-  
-  app.set('view engine', 'handlebars')
-  
-  
-  app.use(bodyParser.json()).use(bodyParser.urlencoded({
+  })
+);
+
+app.set("view engine", "handlebars");
+
+app.use(bodyParser.json()).use(
+  bodyParser.urlencoded({
     extended: true
-  }))
-  
-  app.use(express.static(__dirname + '/public'));
-  
-
-  app.use(checkNet)
-
-
-
-
-app.get('/',(req,res)=>{
-
-
-    res.redirect('/homePage')
-
   })
+);
 
+app.use(express.static(__dirname + "/public"));
 
-  app.get('/index',(req,res)=>{
-    res.render('index')
-  })
+app.use(checkNet);
 
-  app.get('/notification',async(req,res)=>{
+app.get("/", (req, res) => {
+  res.redirect("/homePage");
+});
 
-      if(req.user){
+app.get("/index", (req, res) => {
+  res.render("index");
+});
+
+app.get("/notification", async (req, res) => {
+  if (req.user) {
     const session_email = req.session.session_email;
 
-    const allMemes = await MemeUser.find({email:session_email}).sort({_id:-1})
-
-    var uploadedMemes= [];
-
-
-
-   
-
-    allMemes.map((one)=>{
-      uploadedMemes = one.user_memes
-    })
-
-    const  uploadedMemes1= uploadedMemes.reverse()
-
-    console.log(uploadedMemes)
-    // res.send(uploadedMemes)
-    res.render('notification',{
-      uploadedMemes1
-    })
-
-  }
-
-  
-  else {
-    res.render('login', {
-        message: 'Please login to continue',
-        messageClass: 'alert-danger'
+    const allMemes = await MemeUser.find({ email: session_email }).sort({
+      _id: -1
     });
-}
-  })
 
+    var uploadedMemes = [];
 
+    allMemes.map(one => {
+      uploadedMemes = one.user_memes;
+    });
 
+    const uploadedMemes1 = uploadedMemes.reverse();
 
+    console.log(uploadedMemes);
+    // res.send(uploadedMemes)
+    res.render("notification", {
+      uploadedMemes1
+    });
+  } else {
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
+  }
+});
 
-  app.get('/getAllMemes',(req,res)=>{
+app.get("/getAllMemes", (req, res) => {});
 
-    
-
-  })
-
-
-
-
-
-  // -------------------------   POST  ALL MEMES GET REQUEST  start -------------------------
-  app.post('/getAllmemes',async(req,res)=>{
-    // get username or email from front end local storage or session or chace 
-    const username = req.body.username;
-    if(username){
-      try {
-        const allMemes = await MemeData.find().sort({_id:-1});
-        res.json(allMemes)
-      } catch (error) {
-          console.log(error.message)
-      }
-    } 
-    else{ 
-      // not login
-      res.json({msg:'You are not logged in'})
+// -------------------------   POST  ALL MEMES GET REQUEST  start -------------------------
+app.post("/getAllmemes", async (req, res) => {
+  // get username or email from front end local storage or session or chace
+  const username = req.body.username;
+  if (username) {
+    try {
+      const allMemes = await MemeData.find().sort({ _id: -1 });
+      res.json(allMemes);
+    } catch (error) {
+      console.log(error.message);
     }
-  })
-    // -------------------------   POST  ALL MEMES GET REQUEST  end -------------------------
-  
+  } else {
+    // not login
+    res.json({ msg: "You are not logged in" });
+  }
+});
+// -------------------------   POST  ALL MEMES GET REQUEST  end -------------------------
 
-
-
-    
-
-  app.get('/homePage',async(req,res)=>{
-
-    console.log('opening home page')
-    if (req.user) {
-      const allMemes = await MemeData.find().sort({_id:-1})
-      console.log('allmeme',allMemes)
-      const memeTrendTag = await AllMemeTT.find({})
-      const memeAtrending = await adminSetMTT.find({})
-      const memeArray = []
-        /* Final data for array of trending memes*/
-      memeAtrending.map((one)=>{
-      memeArray.push(one.memeTrendSA)
-      })
-      const finalMemeArray = memeArray[0]
-      console.log(memeArray)
-      res.render('homePage',{
-        allMemes,memeTrendTag,finalMemeArray
-      });
-  } 
-  else {
-      res.render('login', {
-          message: 'Please login to continue',
-          messageClass: 'alert-danger'
-      });
+app.get("/homePage", async (req, res) => {
+  console.log("opening home page");
+  if (req.user) {
+    const allMemes = await MemeData.find().sort({ _id: -1 });
+    console.log("allmeme", allMemes);
+    const memeTrendTag = await AllMemeTT.find({});
+    const memeAtrending = await adminSetMTT.find({});
+    const memeArray = [];
+    /* Final data for array of trending memes*/
+    memeAtrending.map(one => {
+      memeArray.push(one.memeTrendSA);
+    });
+    const finalMemeArray = memeArray[0];
+    console.log(memeArray);
+    res.render("homePage", {
+      allMemes,
+      memeTrendTag,
+      finalMemeArray
+    });
+  } else {
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
   }
   //     const allMemes = await MemeData.find().sort({_id:-1})
 
   // res.render('homePage',{
   //         allMemes
   //       });
-
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-  app.get('/memeUpload',(req,res)=>{
-    if (req.user){
-    res.render('memeUpload')
-    }
-    
-  else {
-    res.render('login', {
-        message: 'Please login to continue',
-        messageClass: 'alert-danger'
-    });
-}
-  
-  })
-
-  app.get('/memeUpload2', async(req,res)=>{
-if(req.user){
-    const memeTag = await AllMemeTT.find({memeTT:'memeTag'})
-    const memeTrend = await AllMemeTT.find({memeTT:'memeTrend'})
-
-    console.log(memeTrend)
-    res.render('memeUpload2',{
-      memeTag,memeTrend
-    })
-  }
-
-    
-  else {
-    res.render('login', {
-        message: 'Please login to continue',
-        messageClass: 'alert-danger'
-    });
-}
-  })
-
-
-  app.get('/memeTags',async(req,res)=>{
-    const memeTag = await AllMemeTT.find({memeTT:'memeTag'})
-    console.log(memeTag);
-    res.json(memeTag)
-
-  })
-
-  app.get('/memeTrends',async(req,res)=>{
-    const memeTrend = await AllMemeTT.find({memeTT:'memeTrend'})
-    console.log(memeTrend);
-    res.json(memeTrend)
-
-  })
-
-
-
-
-
-
-
-
-
-
-  app.get('/memeS',(req,res)=>{
-    res.render('memeS')
-  })
-
-
-
-
-
-
-
-
-
-  //  GET Request trending contents --- Array of trends -----------------------------------------------------
-
-  app.get('/getTrendingMemesArray',async(req,res)=>{
-    const mainD = await MemeData.find({})
-    
-    const memeAtrending = await adminSetMTT.find({})
-  
-    const memeArray = []
-    const finalMemeArray = []   /* Final data for array of trending memes*/
-
-    memeAtrending.map((one)=>{
-      memeArray.push(one.memeTrendSA)
-    })
-    memeArray[0].map((one)=>{
-      mainD.map((two)=>{
-        if(two.meme_trend == one){ 
-          finalMemeArray.push(two)
-        }
-      })
-    })
-    console.log(finalMemeArray)
-    res.json(finalMemeArray)
-
-  })
-
-  //  GET Request trending contents --- Array of trends ---------------------------------------------------------------
-
-
-
-
- //  GET Request trending contents --- Single meme trends -----------------------------------------------------
-
- app.get('/getTrendingMemesSingle',async(req,res)=>{
-  const mainD = await MemeData.find({})
-
-  const memeAtrending = await adminSetMTT.find({})
-
-  const singleMeme=[]
-  const finalMemeSingle = []  /* final data for single trendig meme */
-  memeAtrending.map((one)=>{
-    singleMeme.push(one.memeTrendS)
-  })
-  
-  singleMeme.map((one)=>{
-    mainD.map((two)=>{
-      if(two.meme_trend == one){
-        finalMemeSingle.push(two)
-      }
-    })
-  })
-
-  res.send(finalMemeSingle)
-  console.log(finalMemeSingle)
- })
-
-
- 
-
-
-
- //  GET Request trending contents --- Single meme trends -----------------------------------------------------
-
-
-
-
-
-
-  app.get('/trendingPage', async(req,res)=>{
-    if(req.user){
-    const mainD = await MemeData.find({})
-
-    const memeAtrending = await adminSetMTT.find({})
-  
-    const memeArray = []
-    const finalMemeArray = []   /* Final data for array of trending memes*/
-  
-    const singleMeme=[]
-    const finalMemeSingle = []  /* final data for single trendig meme */
-    // console.log(memeAtrending);
-  
-  
-    memeAtrending.map((one)=>{
-      memeArray.push(one.memeTrendSA)
-    })
-    memeAtrending.map((one)=>{
-      singleMeme.push(one.memeTrendS)
-    })
-  
-    memeArray[0].map((one)=>{
-      mainD.map((two)=>{
-        if(two.meme_trend == one){
-          finalMemeArray.push(two)
-        }
-      })
-    })
-  
-     singleMeme.map((one)=>{
-       mainD.map((two)=>{
-         if(two.meme_trend == one){
-           finalMemeSingle.push(two)
-         }
-       })
-    })
-  
-  
-    console.log('array if meme',finalMemeArray)
- 
-
-    res.render('trendingPage',{
-      finalMemeArray,finalMemeSingle
-    })
-
-  }
-
-  
-  else {
-    res.render('login', {
-        message: 'Please login to continue',
-        messageClass: 'alert-danger'
-    });
-}
-  })
-
-  app.get('/register', (req, res) => {
-    res.render('register');
-});
-
-
-app.get('/profile', async(req, res) => {
-  if(req.user){
-  const session_email = req.session.session_email;
-  const data = await MemeUser.find({email:session_email})
-  console.log('session email',session_email)
-
-  var copyD = '' ;
-
-  userMemes = data[0].user_memes
-
-  console.log('object',copyD)
-  
-  //user total meme
-
-  const totalMeme = userMemes.length;
-  console.log('total memens of session email',totalMeme)
-
-  console.log('session user meme',data)
-  res.render('profile',{
-    data,totalMeme
-  });
-}
-
-else {
-  res.render('login', {
-      message: 'Please login to continue',
-      messageClass: 'alert-danger'
-  });
-}
-});
-
-
-
-  // posting user data register 
-  app.post('/register', async(req,res)=>{
-    const username = req.body.username;
-    const email = req.body.email;
-    const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-
-    console.log(username)
-    console.log(email)
-    console.log(password)
-
-    const data = await MemeUser.find({username})
-    console.log(data)
-
-    if (password === confirmPassword) {
-      if (data > 0) {
-
-          res.render('register', {
-              message: 'User already registered.',
-              messageClass: 'alert-danger'
-          });
-
-          return;
-      }
-
-      const hashedPassword = getHashedPassword(password);
-
-      var user = new MemeUser({
-        username,
-        email,
-        password: hashedPassword
-
-      });
-      user.save()
-      .then((result)=>{
-        console.log(result);
-        res.send(result)
-      })
-
-      res.render('login', {
-          message: 'Registration Complete. Please login to continue.',
-          messageClass: 'alert-success'
-      });
+app.get("/memeUpload", (req, res) => {
+  if (req.user) {
+    res.render("memeUpload");
   } else {
-      res.render('register', {
-          message: 'Password does not match.',
-          messageClass: 'alert-danger'
-      });
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
   }
-     
-
-
-  })
-
-
-
-  // login get request
-  app.get('/login', (req, res) => {
-    res.render('login');
 });
 
-  // login post request 
+app.get("/memeUpload2", async (req, res) => {
+  if (req.user) {
+    const memeTag = await AllMemeTT.find({ memeTT: "memeTag" });
+    const memeTrend = await AllMemeTT.find({ memeTT: "memeTrend" });
 
-  
-app.post('/login', async(req, res) => {
+    console.log(memeTrend);
+    res.render("memeUpload2", {
+      memeTag,
+      memeTrend
+    });
+  } else {
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
+  }
+});
+
+app.get("/memeTags", async (req, res) => {
+  const memeTag = await AllMemeTT.find({ memeTT: "memeTag" });
+  console.log(memeTag);
+  res.json(memeTag);
+});
+
+app.get("/memeTrends", async (req, res) => {
+  const memeTrend = await AllMemeTT.find({ memeTT: "memeTrend" });
+  console.log(memeTrend);
+  res.json(memeTrend);
+});
+
+app.get("/memeS", (req, res) => {
+  res.render("memeS");
+});
+
+//  GET Request trending contents --- Array of trends -----------------------------------------------------
+
+app.get("/getTrendingMemesArray", async (req, res) => {
+  const mainD = await MemeData.find({});
+
+  const memeAtrending = await adminSetMTT.find({});
+
+  const memeArray = [];
+  const finalMemeArray = []; /* Final data for array of trending memes*/
+
+  memeAtrending.map(one => {
+    memeArray.push(one.memeTrendSA);
+  });
+  memeArray[0].map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeArray.push(two);
+      }
+    });
+  });
+  console.log(finalMemeArray);
+  res.json(finalMemeArray);
+});
+
+//  GET Request trending contents --- Array of trends ---------------------------------------------------------------
+
+//  GET Request trending contents --- Single meme trends -----------------------------------------------------
+
+app.get("/getTrendingMemesSingle", async (req, res) => {
+  const mainD = await MemeData.find({});
+
+  const memeAtrending = await adminSetMTT.find({});
+
+  const singleMeme = [];
+  const finalMemeSingle = []; /* final data for single trendig meme */
+  memeAtrending.map(one => {
+    singleMeme.push(one.memeTrendS);
+  });
+
+  singleMeme.map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeSingle.push(two);
+      }
+    });
+  });
+
+  res.send(finalMemeSingle);
+  console.log(finalMemeSingle);
+});
+
+//  GET Request trending contents --- Single meme trends -----------------------------------------------------
+
+app.get("/trendingPage", async (req, res) => {
+  // if(req.user){
+  const mainD = await MemeData.find({});
+
+  const memeAtrending = await adminSetMTT.find({});
+
+  const memeArray = [];
+  const finalMemeArray = []; /* Final data for array of trending memes*/
+
+  const singleMeme = [];
+  const finalMemeSingle = []; /* final data for single trendig meme */
+  // console.log(memeAtrending);
+
+  memeAtrending.map(one => {
+    memeArray.push(one.memeTrendSA);
+  });
+  memeAtrending.map(one => {
+    singleMeme.push(one.memeTrendS);
+  });
+
+  memeArray[0].map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeArray.push(two);
+      }
+    });
+  });
+
+  singleMeme.map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeSingle.push(two);
+      }
+    });
+  });
+  // console.log(finalMemeArray)
+
+  console.log("array if meme", finalMemeSingle);
+
+  res.render("trendingPage", {
+    finalMemeArray,
+    finalMemeSingle
+  });
+
+  // }
+
+  //   else {
+  //     res.render('login', {
+  //         message: 'Please login to continue',
+  //         messageClass: 'alert-danger'
+  //     });
+  // }
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+// --------------------------------- Profile API
+
+app.post("/userMemes", async (req, res) => {
+  const user = req.body.email;
+  if (user) {
+    const data = await MemeUser.find({ email: user });
+    const userAllMemes = []
+    let FinalUserAllMemes=[]
+
+    data.map((one)=>{
+      userAllMemes.push(one.user_memes)
+    })
+    FinalUserAllMemes=userAllMemes[0]
+    console.log(FinalUserAllMemes);
+    res.json(FinalUserAllMemes);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+// --------------------------------- Profile API
+
+app.get("/profile", async (req, res) => {
+  if (req.user) {
+    const session_email = req.session.session_email;
+    const data = await MemeUser.find({ email: session_email });
+    console.log("session email", session_email);
+
+    var copyD = "";
+
+    userMemes = data[0].user_memes;
+
+    console.log("object", copyD);
+
+    //user total meme
+
+    const totalMeme = userMemes.length;
+    console.log("total memens of session email", totalMeme);
+
+    console.log("session user meme", data);
+    res.render("profile", {
+      data,
+      totalMeme
+    });
+  } else {
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
+  }
+});
+
+//--------------------------------------------------------------------Posting user data API
+
+app.post("/registerGoogle", async (req, res) => {
+  const username = req.body.username;
+  const email = req.body.email;
+  const user_avatar = req.body.userAvatar;
+  console.log(username);
+
+  const data = await MemeUser.find({ email });
+
+  if (!data) {
+    var user = new MemeUser({
+      username,
+      email,
+      user_avatar
+    });
+
+    user.save().then(result => {
+      console.log(result);
+      res.json("done");
+    });
+  } else {
+    console.log("already exist");
+  }
+});
+
+//--------------------------------------------------------------------Posting user data API
+
+// posting user data register
+app.post("/register", async (req, res) => {
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  console.log(username);
+  console.log(email);
+  console.log(password);
+
+  const data = await MemeUser.find({ username });
+  console.log(data);
+
+  if (password === confirmPassword) {
+    if (data > 0) {
+      res.render("register", {
+        message: "User already registered.",
+        messageClass: "alert-danger"
+      });
+
+      return;
+    }
+
+    const hashedPassword = getHashedPassword(password);
+
+    var user = new MemeUser({
+      username,
+      email,
+      password: hashedPassword
+    });
+    user.save().then(result => {
+      console.log(result);
+      res.send(result);
+    });
+
+    res.render("login", {
+      message: "Registration Complete. Please login to continue.",
+      messageClass: "alert-success"
+    });
+  } else {
+    res.render("register", {
+      message: "Password does not match.",
+      messageClass: "alert-danger"
+    });
+  }
+});
+
+// login get request
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+// login post request
+
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   req.session.session_email = req.body.email;
-  console.log('this is session name', req.session.session_name)
+  console.log("this is session name", req.session.session_name);
   const hashedPassword = getHashedPassword(password);
-  const data = await MemeUser.find({email,password:hashedPassword})
-console.log(data)
+  const data = await MemeUser.find({ email, password: hashedPassword });
+  console.log(data);
 
-  if (data.length > 0 ) { 
-      const authToken = generateAuthToken();
-      authTokens[authToken] = email;
-      res.cookie('AuthToken', authToken);
-      res.redirect('/homePage');
-      return;
+  if (data.length > 0) {
+    const authToken = generateAuthToken();
+    authTokens[authToken] = email;
+    res.cookie("AuthToken", authToken);
+    res.redirect("/homePage");
+    return;
   } else {
-      res.render('login', {
-          message: 'Invalid username or password',
-          messageClass: 'alert-danger'
-      });
+    res.render("login", {
+      message: "Invalid username or password",
+      messageClass: "alert-danger"
+    });
   }
 });
-
 
 //protected routes
 
-app.get('/protected', (req, res) => {
+app.get("/protected", (req, res) => {
   if (req.user) {
-      res.render('homePage');
+    res.render("homePage");
   } else {
-      res.render('login', {
-          message: 'Please login to continue',
-          messageClass: 'alert-danger'
-      });
+    res.render("login", {
+      message: "Please login to continue",
+      messageClass: "alert-danger"
+    });
   }
 });
-app.post('/memeUploadVideo',upload.single('video'), async(req,res)=>{
-  console.log(req.file.path)
+app.post("/memeUploadVideo", upload.single("video"), async (req, res) => {
+  console.log(req.file.path);
   try {
-  const result = await cloudinary.uploader.upload(req.file.path,{resource_type: "video"})
-  const meme_video =result.secure_url;
-  const email = req.session.session_email;
-  const meme_title = req.body.title;
-  const meme_description = req.body.description;
-  const meme_type = req.body.type;
-  const meme_by = req.session.session_email;
-  const createdAt = Date.now();
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "video"
+    });
+    const meme_video = result.secure_url;
+    const email = req.session.session_email;
+    const meme_title = req.body.title;
+    const meme_description = req.body.description;
+    const meme_type = req.body.type;
+    const meme_by = req.session.session_email;
+    const createdAt = Date.now();
 
+    console.log("session username", email);
+    console.log("image url", meme_video);
 
+    var memeD = {
+      meme_video,
+      meme_title,
+      meme_description,
+      createdAt,
+      meme_type
+    };
 
-  console.log('session username',email)
-  console.log('image url',meme_video)
+    MemeUser.findOneAndUpdate({ email }, { $push: { user_memes_video: memeD } })
+      .then(url => {
+        console.log(url);
+        res.send(url);
+      })
+      .catch(e => console.log(e));
 
- var memeD = {
-  meme_video,
-  meme_title,
-  meme_description,
-  createdAt,
-  meme_type,
- 
-  
+    // const allMemes = new MemeData({
+    //   meme_video,
+    //   meme_title,
+    //   meme_description,
+    //   createdAt,
+    //   meme_type
+    // })
+
+    // allMemes.save((result)=>{
+
+    //   console.log(result)
+    // })
+    res.redirect("/homePage");
+
+    console.log(result);
+  } catch (error) {
+    console.log(error);
   }
+});
 
-
-MemeUser.findOneAndUpdate({email}, { $push : {user_memes_video: memeD}})
-.then((url)=>{
-    console.log(url);
-    res.send(url)
-  }).catch(e=>console.log(e))
-
-  
-
-
-  // const allMemes = new MemeData({
-  //   meme_video,
-  //   meme_title,
-  //   meme_description,
-  //   createdAt,
-  //   meme_type
-  // })
-  
-  // allMemes.save((result)=>{
-  
-  //   console.log(result)
-  // })
-  res.redirect('/homePage'); 
-
-  
-
-
-
-  console.log(result)
-  }
-
-  catch(error){
-    console.log(error)
-  }
-  
-  
-
-})
-
-
-
-app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
-  console.log('getting req');
+app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
+  console.log("getting req");
   // // console.log(req.body.imageData);
   // console.log(req.title);
   // console.log('Title',req.body.title)
   // console.log('Title',req.body.description)
-  try{
-    
-    const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-    const meme_createdAt=new Date().toLocaleDateString()
-    const meme_image =result.secure_url;
-    const email = req.session.username;
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      quality: "auto",
+      fetch_format: "auto"
+    });
+    const meme_createdAt = new Date().toLocaleDateString();
+    const meme_image = result.secure_url;
+    const email = req.body.username;
     const meme_title = req.body.title;
     const meme_description = req.body.description;
     const meme_type = req.body.type;
-    const meme_by = req.session.username;
-    // const meme_trend = req.body.trend;
+    console.log(meme_type);
+    const meme_by = req.body.username;
+    const meme_trend = req.body.type;
     var memeD = {
       meme_image,
       meme_title,
       meme_description,
       meme_type,
       // meme_trend,
-      meme_createdAt
-      
-      
-      }
-    
-    
-    MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
-    .then((url)=>{
-        // console.log(url);
-      
+      meme_createdAt,
+      meme_trend
+    };
+
+    MemeUser.findOneAndUpdate({ email }, { $push: { user_memes: memeD } })
+      .then(url => {
+        console.log(url);
+
         // res.send(url)
-      }).catch(e=>console.log(e))
-    
-      const allMemes = new MemeData({
-        meme_image,
-        meme_title,
-        meme_description,
-        meme_type,
-        meme_by,
-        // meme_trend,
-        meme_createdAt
       })
-      
-      /// redirecting to notification area
-    
-      
-      allMemes.save((result)=>{
-    
-       
-        // console.log(result)
-      })
+      .catch(e => console.log(e));
 
+    const allMemes = new MemeData({
+      meme_image,
+      meme_title,
+      meme_description,
+      meme_type,
+      meme_by,
+      meme_trend,
+      meme_createdAt
+    });
 
-    
-    res.json(result)
-  }
-  catch(e){  
+    /// redirecting to notification area
+
+    allMemes.save(result => {
+      // console.log(result)
+    });
+
+    res.json(result);
+  } catch (e) {
     console.log(e);
   }
-  // console.log('HELLOoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-  console.log(req.file.path)
+  console.log(req.file.path);
+});
 
+// uploading meme
+app.post("/memeUpload", upload.single("image"), async (req, res) => {
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    quality: "auto",
+    fetch_format: "auto"
+  });
 
-
-
-})
-
-
- 
-
-
-  // uploading meme 
-  app.post('/memeUpload',upload.single('image'), async(req,res)=>{
-
-  const result = await cloudinary.uploader.upload(req.file.path,{quality: "auto", fetch_format: "auto"});
-  
-  console.log(req.file.path)
+  console.log(req.file.path);
   // const meme_createdAt = new Date().toJSON().slice(0, 10);
-  const meme_createdAt=new Date().toLocaleDateString()
-  const meme_image =result.secure_url;
+  const meme_createdAt = new Date().toLocaleDateString();
+  const meme_image = result.secure_url;
   const email = req.session.session_email;
   const meme_title = req.body.title;
   const meme_description = req.body.description;
@@ -703,32 +628,24 @@ app.post('/imageUploadTrial',upload.single('imageData'), async(req,res)=>{
   const meme_by = req.session.session_email;
   const meme_trend = req.body.trend;
 
+  console.log("session username", email);
+  console.log("image url", meme_image);
 
+  var memeD = {
+    meme_image,
+    meme_title,
+    meme_description,
+    meme_type,
+    meme_trend,
+    meme_createdAt
+  };
 
-  console.log('session username',email)
-  console.log('image url',meme_image)
-
- var memeD = {
-  meme_image,
-  meme_title,
-  meme_description,
-  meme_type,
-  meme_trend,
-  meme_createdAt
-  
-  
-  }
-
-
-MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
-.then((url)=>{
-    // console.log(url);
-  
-    // res.send(url)
-  }).catch(e=>console.log(e))
-
-  
-
+  MemeUser.findOneAndUpdate({ email }, { $push: { user_memes: memeD } })
+    .then(url => {
+      // console.log(url);
+      // res.send(url)
+    })
+    .catch(e => console.log(e));
 
   const allMemes = new MemeData({
     meme_image,
@@ -738,353 +655,286 @@ MemeUser.findOneAndUpdate({email}, { $push : {user_memes: memeD}})
     meme_by,
     meme_trend,
     meme_createdAt
-  })
-  
-  /// redirecting to notification area
-
-  
-  allMemes.save((result)=>{
-
-   
-    // console.log(result)
-  })
-
-  res.redirect('/notification'); 
-  
-
-  })
-
-
-
-
-
-// Dank memes 
-
-
-app.get('/dankMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#dank'})
-  console.log(allMemes)
-  res.render('dankMemes',{
-    allMemes
-  })
-})
-
-/////////////////////////////////////////////////////////////////////////////////  GET  Memes
-app.get('/GetdankMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#dank'})
-  
-  res.json(allMemes)
-
-})
-
-app.get('/GetindianMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#indian'})
-  res.json(allMemes)
-})
-
-app.get('/GetfunnyMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#funny'})
-  res.json(allMemes)
-})
-
-app.get('/GetadultMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#adult'})
-  res.json(allMemes)
-})
-/////////////////////////////////////////////////////////////////////////////////  GET  Memes
-
-
-
-app.get('/indianMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#indian'})
-  console.log(allMemes)
-  res.render('indianMemes',{
-    allMemes
-  })
-})
-
-app.get('/funnyMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#funny'})
-  console.log(allMemes)
-  res.render('funnyMemes',{
-    allMemes
-  })
-})
-
-
-//// /////////////////////////////////////////////////////////////////////////admin side to control all the meme trend
-app.get('/setMemeTrend',async(req,res)=>{
-  const data = await AllMemeTT.find({}).sort({_id:-1})
-  const data1 = await AllMemeTT.find({memeTT:'memeTrend'})
-
-  const mainD = await MemeData.find({})
-  const memeAtrending = await adminSetMTT.find({})
-
-  const memeArray = []
-  const finalMemeArray = []   /* Final data for array of trending memes*/
-
-  const singleMeme=[]
-  const finalMemeSingle = []  /* final data for single trendig meme */
-  // console.log(memeAtrending);
-
-
-  memeAtrending.map((one)=>{
-    memeArray.push(one.memeTrendSA)
-  })
-  memeAtrending.map((one)=>{
-    singleMeme.push(one.memeTrendS)
-  })
-
-  memeArray[0].map((one)=>{
-    mainD.map((two)=>{
-      if(two.meme_trend == one){
-        finalMemeArray.push(two)
-      }
-    })
-  })
-
-   singleMeme.map((one)=>{
-     mainD.map((two)=>{
-       if(two.meme_trend == one){
-         finalMemeSingle.push(two)
-       }
-     })
-  })
-
-
-  console.log('array if meme',finalMemeArray)
-
- res.render('setMemeTrend',{
-   data,data1,finalMemeArray,finalMemeSingle
- })
-})
-
-app.post('/DeleteMemeTrend',(req,res)=>{
-
-  const id = req.body.id;
-  console.log(id)
- 
-  AllMemeTT.findByIdAndRemove(id, function (err, deletedStandUp) {
-    // handle any potential errors here
-    res.redirect('/setMemeTrend');
   });
 
-})
+  /// redirecting to notification area
 
+  allMemes.save(result => {
+    // console.log(result)
+  });
 
-app.post('/UpdateMemeTrend',(req,res)=>{
+  res.redirect("/notification");
+});
 
+// Dank memes
+
+app.get("/dankMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#dank" });
+  console.log(allMemes);
+  res.render("dankMemes", {
+    allMemes
+  });
+});
+
+/////////////////////////////////////////////////////////////////////////////////  GET  Memes
+app.get("/GetdankMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#dank" });
+
+  res.json(allMemes);
+});
+
+app.get("/GetindianMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#indian" });
+  res.json(allMemes);
+});
+
+app.get("/GetfunnyMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#funny" });
+  res.json(allMemes);
+});
+
+app.get("/GetadultMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#adult" });
+  res.json(allMemes);
+});
+/////////////////////////////////////////////////////////////////////////////////  GET  Memes
+
+app.get("/indianMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#indian" });
+  console.log(allMemes);
+  res.render("indianMemes", {
+    allMemes
+  });
+});
+
+app.get("/funnyMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#funny" });
+  console.log(allMemes);
+  res.render("funnyMemes", {
+    allMemes
+  });
+});
+
+//// /////////////////////////////////////////////////////////////////////////admin side to control all the meme trend
+app.get("/setMemeTrend", async (req, res) => {
+  const data = await AllMemeTT.find({}).sort({ _id: -1 });
+  const data1 = await AllMemeTT.find({ memeTT: "memeTrend" });
+
+  const mainD = await MemeData.find({});
+  const memeAtrending = await adminSetMTT.find({});
+
+  const memeArray = [];
+  const finalMemeArray = []; /* Final data for array of trending memes*/
+
+  const singleMeme = [];
+  const finalMemeSingle = []; /* final data for single trendig meme */
+  // console.log(memeAtrending);
+
+  memeAtrending.map(one => {
+    memeArray.push(one.memeTrendSA);
+  });
+  memeAtrending.map(one => {
+    singleMeme.push(one.memeTrendS);
+  });
+
+  memeArray[0].map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeArray.push(two);
+      }
+    });
+  });
+
+  singleMeme.map(one => {
+    mainD.map(two => {
+      if (two.meme_trend == one) {
+        finalMemeSingle.push(two);
+      }
+    });
+  });
+
+  console.log("array if meme", finalMemeArray);
+
+  res.render("setMemeTrend", {
+    data,
+    data1,
+    finalMemeArray,
+    finalMemeSingle
+  });
+});
+
+app.post("/DeleteMemeTrend", (req, res) => {
   const id = req.body.id;
-  console.log(id)
+  console.log(id);
+
+  AllMemeTT.findByIdAndRemove(id, function(err, deletedStandUp) {
+    // handle any potential errors here
+    res.redirect("/setMemeTrend");
+  });
+});
+
+app.post("/UpdateMemeTrend", (req, res) => {
+  const id = req.body.id;
+  console.log(id);
   const filter = {
     id: id
   };
-  AllMemeTT.findOneAndUpdate(filter, update).then((result) => {
-    console.log(result)
-    res.redirect('/setMemeTrend')
-  })
+  AllMemeTT.findOneAndUpdate(filter, update).then(result => {
+    console.log(result);
+    res.redirect("/setMemeTrend");
+  });
+});
 
-
-})
-
-
-app.post('/setMemeTrend',(req,res)=>{
-
+app.post("/setMemeTrend", (req, res) => {
   const memeTitle = req.body.memeTitle;
-  const memeTT =req.body.memeTT;
+  const memeTT = req.body.memeTT;
 
   var memed = new AllMemeTT({
-  memeTitle,
-  memeTT
-})
-
-memed.save().then((data)=>{
-  console.log(data)
-  res.redirect('/setMemeTrend')
-})
-})
-
-
-
-
-
-app.get('/adultMemes',async(req,res)=>{
-
-  const allMemes = await MemeData.find({meme_type:'#adult'})
-  console.log(allMemes)
-  res.render('adultMemes',{
-    allMemes
-  })
-})
-
-  
-app.post('/selectMemeTrendA',async(req,res)=>{
-
- const memes = req.body.memA;
-console.log(memes);
- 
-
-const Admin = await adminSetMTT.find({})
-const role = 'admin'
-
-
-
-if(Admin.length>0){
-  const allMemes = new adminSetMTT({
-    role:'admin',
-    memeTrendSA:memes
-  })
-  
-  console.log('going in if');
-  adminSetMTT.findOneAndRemove(role, function (err, deletedStandUp) {
-    // handle any potential errors here
-    // res.redirect('/setMemeTrend');
+    memeTitle,
+    memeTT
   });
-  
-  // adminSetMTT.findOneAndUpdate({role}, { $push : {memeTrendSA:memes}})
-  // .then((url)=>{
-  //     console.log(url);
-  //     res.redirect('/setMemeTrend')
-  //     // res.send(url)
-  //   }).catch(e=>console.log(e))
 
-  allMemes.save().then((data)=>{
-    console.log(data)
-    res.redirect('/setMemeTrend')
-  })
+  memed.save().then(data => {
+    console.log(data);
+    res.redirect("/setMemeTrend");
+  });
+});
 
+app.get("/adultMemes", async (req, res) => {
+  const allMemes = await MemeData.find({ meme_type: "#adult" });
+  console.log(allMemes);
+  res.render("adultMemes", {
+    allMemes
+  });
+});
 
-} 
+app.post("/selectMemeTrendA", async (req, res) => {
+  const memes = req.body.memA;
+  console.log(memes);
 
+  const Admin = await adminSetMTT.find({});
+  const role = "admin";
 
-else{
-  const allMemes = new adminSetMTT({
-    role:'admin',
-    memeTrendSA:memes
-  })
-  
-  console.log('going in else');
-  allMemes.save().then((data)=>{
-    console.log(data)
-    res.redirect('/setMemeTrend')
-  })
-}
+  if (Admin.length > 0) {
+    const allMemes = new adminSetMTT({
+      role: "admin",
+      memeTrendSA: memes
+    });
 
+    console.log("going in if");
+    adminSetMTT.findOneAndRemove(role, function(err, deletedStandUp) {
+      // handle any potential errors here
+      // res.redirect('/setMemeTrend');
+    });
 
-})
+    // adminSetMTT.findOneAndUpdate({role}, { $push : {memeTrendSA:memes}})
+    // .then((url)=>{
+    //     console.log(url);
+    //     res.redirect('/setMemeTrend')
+    //     // res.send(url)
+    //   }).catch(e=>console.log(e))
 
+    allMemes.save().then(data => {
+      console.log(data);
+      res.redirect("/setMemeTrend");
+    });
+  } else {
+    const allMemes = new adminSetMTT({
+      role: "admin",
+      memeTrendSA: memes
+    });
 
+    console.log("going in else");
+    allMemes.save().then(data => {
+      console.log(data);
+      res.redirect("/setMemeTrend");
+    });
+  }
+});
 
-app.post('/selectMemeTrendS',(req,res)=>{
-
-
+app.post("/selectMemeTrendS", (req, res) => {
   const memes = req.body.memeS;
   console.log(memes);
-   
-  
+
   // const Admin = await adminSetMTT.find({})
-  const role = 'admin'
+  const role = "admin";
 
-  adminSetMTT.findOneAndUpdate({role}, { memeTrendS:memes})
-.then((url)=>{
-    console.log(url);
-    res.redirect('/setMemeTrend')
-  }).catch(e=>console.log(e))
+  adminSetMTT
+    .findOneAndUpdate({ role }, { memeTrendS: memes })
+    .then(url => {
+      console.log(url);
+      res.redirect("/setMemeTrend");
+    })
+    .catch(e => console.log(e));
+});
 
-    
-})
-
-
-app.post('/memeTrendIndi', async(req,res)=>{
-  const memeTrend = req.body.memeTrend
+app.post("/memeTrendIndi", async (req, res) => {
+  const memeTrend = req.body.memeTrend;
   console.log(memeTrend);
 
-  const allMemes = await MemeData.find({meme_trend:memeTrend})
+  const allMemes = await MemeData.find({ meme_trend: memeTrend });
 
   console.log(allMemes);
 
-  res.render('memeTrendIndi',{
-    allMemes,memeTrend
-  })
+  res.render("memeTrendIndi", {
+    allMemes,
+    memeTrend
+  });
+});
 
-
-})
-
-
-app.post('/admin/contactUs', async(req,res)=>{
+app.post("/admin/contactUs", async (req, res) => {
   const email = req.body.email;
   const msg = req.body.msg;
 
-
   var data = new contactUs({
-    email,msg
-  })
+    email,
+    msg
+  });
 
-   const responseD = await data.save();
-   console.log(responseD)
-   res.redirect('/homePage')
+  const responseD = await data.save();
+  console.log(responseD);
+  res.redirect("/homePage");
+});
 
-})
+app.get("/joinUs", (req, res) => {
+  res.render("joinUs");
+});
 
-app.get('/joinUs',(req,res)=>{
-  res.render('joinUs')
-})
+// push notification expo
 
-
-
-
-// push notification expo 
-
-app.post('/expoPush',async(req,res)=>{
-  const fetchedData = await expoID.find({})
+app.post("/expoPush", async (req, res) => {
+  const fetchedData = await expoID.find({});
   let expoIDdata = req.body.expoID;
 
-  fetchedData.map((one)=>{
-    if(one.expoid !=expoIDdata) {
+  fetchedData.map(one => {
+    if (one.expoid != expoIDdata) {
       var data = new expoID({
-        expoid:expoIDdata
-      })
-    
-         data.save().then((savedD)=>{
-           console.log(savedD)
-         })
-       console.log(expoIDdata);
-   
+        expoid: expoIDdata
+      });
+
+      data.save().then(savedD => {
+        console.log(savedD);
+      });
+      console.log(expoIDdata);
+    } else {
+      console.log(`Device's expoID already present`);
     }
-    else{
-      console.log(`Device's expoID already present`)
-    }
-  })
+  });
+});
 
-  
+app.post("/sendPushNotification", async (req, res) => {
+  const data = await expoID.find({});
+  let title = req.body.title;
+  let body = req.body.body1;
+  let expoIDs = [];
 
+  data.map(one => {
+    expoIDs.push(one.expoid);
+  });
 
-})
+  console.log(expoIDs);
 
-
-
-
-app.post('/sendPushNotification',async(req,res)=>{
-
-const data = await expoID.find({})
-let title = req.body.title;
-let body = req.body.body1
-let expoIDs = [];
-
-data.map((one)=>{
-  expoIDs.push(one.expoid)
-})
-
-console.log(expoIDs)
-
-let notifications = [];
+  let notifications = [];
   for (let pushToken of expoIDs) {
     if (!Expo.isExpoPushToken(pushToken)) {
       console.error(`Push token ${pushToken} is not a valid Expo push token`);
@@ -1113,26 +963,11 @@ let notifications = [];
     }
   })();
 
-  res.redirect('/setMemeTrend')
-  
-
-
-})
-
-
-
-
-
-
-
-
-
-
-
-
+  res.redirect("/setMemeTrend");
+});
 
 const port = process.env.PORT || 3000;
 
-app.listen(port,()=>{
-    console.log(`running on ${port}`)
-})
+app.listen(port, () => {
+  console.log(`running on ${port}`);
+});
