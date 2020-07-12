@@ -2,21 +2,21 @@
 <div class="container">
 <div class="row">
   <div class="col-sm-12 text-center">
-    <form action="/sendPushNotification" method="POST">
+    {{!-- <form action="/sendPushNotification" method="POST">
 
 <div class="form-group">
-    {{!-- <label for="exampleInputEmail1">Email address</label> --}}
+    <label for="exampleInputEmail1">Email address</label>
     <input type="text" class="form-control" name="title"  placeholder="Enter Title">
   </div>
 
   <div class="form-group">
-    {{!-- <label for="exampleInputEmail1">Email address</label> --}}
+    <label for="exampleInputEmail1">Email address</label>
     <input type="text" class="form-control"  name="body1"  placeholder="Enter Body">
   </div>
 
     <button class="btn btn-info" type="submit">SEND NOTIFICATION</button>
  
-    </form>
+    </form> --}}
   </div>
 </div>
 <br>
@@ -24,8 +24,16 @@
 
 <div class="row">
   <div class="col-sm-6">
-  <h1>Set meme trend </h1>
-  <form action="/selectMemeTrendA" method="POST">
+      <form action="/selectMemeTrendA" method="POST">
+  <h1> meme trend - multiple </h1>
+    {{#each memeTrendingArray}}
+  <p>
+    <span class="badge badge-primary" style="display">   {{this}}</span>
+ 
+  </p>
+  {{/each}}
+
+  
   {{#each data1}}
 <div class="form-check">
   <input class="form-check-input" name="memA[]" type="checkbox" value="{{memeTitle}}" id="defaultCheck1">
@@ -33,6 +41,7 @@
    {{memeTitle}}
   </label>
 </div>
+
 {{/each}}
 <button style="text-align: center"  type="submit" class="btn btn-info">ADD</button>
 
@@ -40,9 +49,19 @@
 <br><br>
 
   </div>
+
+
    <div class="col-sm-6">
-  <h1>Set meme trend </h1>
-  <form action="/selectMemeTrendS" method="POST">
+       <form action="/selectMemeTrendS" method="POST">
+  <h1> meme trend - single </h1>
+  {{#each memeAtrendingSingle}}
+  <p>
+    <span class="badge badge-primary">   {{memeTrendS }}</span>
+ 
+  </p>
+  {{/each}}
+
+
     {{#each data1}}
 <div class="form-check">
   <input class="form-check-input" type="radio" name="memeS" id="exampleRadios1" value="{{memeTitle}}" >

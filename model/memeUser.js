@@ -24,9 +24,12 @@ const userschema = new Schema({
     ],
     
     user_tag:{
-        type:String
+        type:String,
+        default:'noob'
     },
-    
+    joining_date:{
+        type:String,
+    },
     user_achivements:[
         {
             title:{type:String},
@@ -35,7 +38,8 @@ const userschema = new Schema({
     ],
     
     user_status:{
-        type:String
+        type:String,
+        default:'unblock'
     },
     user_avatar:{
         type:String

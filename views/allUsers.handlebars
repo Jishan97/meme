@@ -1,0 +1,80 @@
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div class="container-fluid">
+
+<div class="row" style="margin:20px">
+
+
+     {{#each allUsers}}
+<div class="col-sm-4">
+<div class="card" style="width: 18rem;">
+       <style>
+                                    .imaged1{
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    transition: .5s linear;
+                                    border: 2px solid black
+                                    }
+                                    </style>
+                                    
+                                    <div class="modal fade" role="dialog" id="imgmodal">
+    <div style="top:20%" class="modal-dialog">
+        <div class="modal-content"></div>          
+                    <img class="" src="" id="show-img">         
+        </div>
+    </div>
+  <img class="card-img-top img-fluid imaged1" src="{{user_avatar}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title badge badge-secondary">Name - {{username}}</h5>
+    <p class="card-text  badge badge-secondary">Email - {{email}}</p>
+    <p class="card-text  badge badge-secondary">Tag - {{user_tag}}</p>
+    <p class="card-text  badge badge-secondary">Status - {{user_status}}</p>
+<p class="card-text">{{meme_createdAt}}</p>
+    {{!-- <button href="#" class="btn btn-primary imaged2">View</button> --}}
+        <form  style="margin: 5px;display: flex;justify-content: center;" action="/auth/authViewUsersMemes" method="POST">
+            <input type="hidden" name="userID" value="{{email}}">
+             <button type="submit" class="btn btn-info">View memes</button>
+             
+        </form>
+
+    <div style="display: flex;justify-content: center; ">
+      <form style="margin: 2px" action="/auth/authBlockuser" method="POST">
+            <input type="hidden" name="userID" value="{{_id}}">
+             <button  type="submit" class="btn btn-danger">Block</button>
+             
+        </form>
+
+           <form  style="margin: 2px" action="/auth/authUnBlockuser" method="POST">
+            <input type="hidden" name="userID" value="{{_id}}">
+             <button   type="submit" class="btn btn-success">UnBlock</button>
+             
+        </form>
+    </div>
+  
+       
+
+  </div>
+</div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(".imaged1").click(function(){
+           var img=$(this).attr('src');
+             $("#show-img").attr('src',img);
+             $("#imgmodal").modal('show');
+        });
+    });
+</script>
+{{/each}}
+
+
+</div>
+
+
+</div>
+
+
+
+

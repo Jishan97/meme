@@ -1,0 +1,64 @@
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div class="container-fluid">
+
+<div class="row" style="margin:20px">
+
+
+     {{#each allMemes}}
+<div class="col-sm-4">
+<div class="card" style="width: 18rem;">
+       <style>
+                                    .imaged1{
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    transition: .5s linear;
+                                    border: 2px solid black
+                                    }
+                                    </style>
+                                    
+                                    <div class="modal fade" role="dialog" id="imgmodal">
+    <div style="top:20%" class="modal-dialog">
+        <div class="modal-content"></div>          
+                    <img class="" src="" id="show-img">         
+        </div>
+    </div>
+  <img class="card-img-top img-fluid imaged1" src="{{meme_image}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{meme_title}}</h5>
+    <p class="card-text">{{meme_description}}</p>
+    <p class="card-text">{{meme_by}}</p>
+    <p class="card-text">{{meme_trend}}</p>
+<p class="card-text">{{meme_createdAt}}</p>
+    {{!-- <button href="#" class="btn btn-primary imaged2">View</button> --}}
+        <form action="/authDeleteMeme" method="POST">
+            <input type="hidden" name="memeID" value="{{_id}}">
+             <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+       
+
+  </div>
+</div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(".imaged1").click(function(){
+           var img=$(this).attr('src');
+             $("#show-img").attr('src',img);
+             $("#imgmodal").modal('show');
+        });
+    });
+</script>
+{{/each}}
+
+
+</div>
+
+
+</div>
+
+
+
+

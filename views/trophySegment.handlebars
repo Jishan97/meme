@@ -1,0 +1,74 @@
+
+
+<div class="container">
+
+<div class="row">
+    {{#each getTrophySegment}}
+    <div class="col-sm-4">
+        <div class="card" style="width: 18rem;">
+       <style>
+                                    .imaged1{
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    transition: .5s linear;
+                                    border: 2px solid black
+                                    }
+                                    </style>
+                                    
+                                    <div class="modal fade" role="dialog" id="imgmodal">
+    <div style="top:20%" class="modal-dialog">
+        <div class="modal-content"></div>          
+                    <img class="" src="" id="show-img">         
+        </div>
+    </div>
+  <img class="card-img-top img-fluid imaged1" src="{{trophyImage}}" alt="Card image cap">
+  <div class="card-body">
+          <p class="card-text  badge badge-secondary">Name - {{trophyName}}</p>
+    <h5 class="card-title badge badge-secondary">Points - {{trophyPoints}}</h5>
+    <p class="card-text  badge badge-secondary">Type - {{trophyType}}</p>
+
+<p class="card-text">{{meme_createdAt}}</p>
+  </div>
+</div>
+    </div>
+    {{/each}}
+</div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col">
+        <form  action="/auth/trophySegment"  method="post" enctype="multipart/form-data" >
+            
+  <div class="form-group">
+    <label for="exampleInputEmail1">Tophy Name</label>
+    <input type="text" class="form-control" name="trophyName" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter trophy name">
+  </div>
+
+   <div class="form-group">
+    <label for="exampleInputEmail1">Tophy Points</label>
+    <input type="text" class="form-control" name="trophyPoints" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter trophy points">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Trophy type</label>
+    <select class="form-control" name="trophyType" id="exampleFormControlSelect1">
+      <option value="gold">gold</option>
+      <option class="silver">silver</option>
+      <option value="bronze">Bornze</option>
+
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Select trophy image</label>
+    <input id="file-upload"  type="file" accept="image/*"  name="image"  class="form-control-file" id="exampleFormControlFile1">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+  </form>
+    </div>
+</div>
+</div>

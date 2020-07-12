@@ -5,128 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Meme world</title>
-    <link href="../assets/css/style.css" rel="stylesheet">
-<link href="../assets/css/ionicons.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+
 
 </head>
 <body>
 
+  <div id="wrapper">
 
-    
- <div class="modal fade action-sheet inset" id="actionSheetInset" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Hello Meme Star!</h5>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="action-button-list">
-                            <li>
-                                <a href="/memeUpload2" class="btn btn-list text-primary" >
-                                    <span>Upload meme (IMAGE) </span>
-                                </a>
-                            </li>
+ <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                              {{!-- <li>
-                                <a href="/memeUploadVideo" class="btn btn-list text-primary" >
-                                    <span>Upload meme (VIDEO)</span>
-                                </a>
-                            </li> --}}
-                            {{!-- <li>
-                                <a href="#" class="btn btn-list" data-dismiss="modal">
-                                    <span>Check memes status</span>
-                                </a>
-                            </li> --}}
-                          
-                            <li class="action-divider"></li>
-                            <li>
-                                <a href="#" class="btn btn-list text-danger" data-dismiss="modal">
-                                    <span>Close</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
         </div>
+        <div class="sidebar-brand-text mx-3">Memes Clan</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/auth/adminDashboard">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        User
+      </div> 
+       <li class="nav-item">
+        <a class="nav-link" href="/auth/getAllUsers">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>All Users</span></a>
+      </li>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      {{!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>All users</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">user status:</h6>
+            <a class="collapse-item" href="buttons.html">Block / Unblock</a>
+            <a class="collapse-item" href="cards.html">Details</a>
+          </div>
+        </div>
+      </li> --}}
+
+
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      {{!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Utilities</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Utilities:</h6>
+            <a class="collapse-item" href="utilities-color.html">Colors</a>
+            <a class="collapse-item" href="utilities-border.html">Borders</a>
+            <a class="collapse-item" href="utilities-animation.html">Animations</a>
+            <a class="collapse-item" href="utilities-other.html">Other</a>
+          </div>
+        </div>
+      </li> --}}
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Memes
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+ 
+
+      <!-- Nav Item - Charts -->
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/allMemes">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>All memes</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+ 
+
+           <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Notification</span></a>
+      </li>
+
+           <li class="nav-item">
+        <a class="nav-link" href="/setMemeTrend">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Meme Trends / Tags</span></a>
+      </li>
+
+         <li class="nav-item">
+        <a class="nav-link" href="/auth/trophySegment">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Trophy segment</span></a>
+      </li>
+
+           <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Feedbacks</span></a>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+
         {{{body}}}
 
 <style>
-    .navH:hover{
-        background-color: rgb(0,111,255,0.8);
-        border-radius: 30%;
-        color: white;
-        transition: .3s linear
-    }
-    .strongT:hover{
-        color: white;
-    }
+
 </style>
 
-            <!-- App Bottom Menu -->
-    <div class="appBottomMenu">
-        <a href="/homePage" class="item navH">
-            <div class="col ">
-                {{!-- <i class="icon ion-ios-today"></i> --}}
-                <svg class="bi bi-house" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V7h1v6.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5zm11-11V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
-  <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
-</svg>
-                <strong class="strongT">Home</strong>
-            </div>
-        </a>
-        <a href="/trendingPage" class="item navH">
-            <div class="col">
-                {{!-- <i class="icon ion-ios-list"></i> --}}
-                <svg class="bi bi-app-indicator" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M5.5 2A3.5 3.5 0 002 5.5v5A3.5 3.5 0 005.5 14h5a3.5 3.5 0 003.5-3.5V8a.5.5 0 011 0v2.5a4.5 4.5 0 01-4.5 4.5h-5A4.5 4.5 0 011 10.5v-5A4.5 4.5 0 015.5 1H8a.5.5 0 010 1H5.5z" clip-rule="evenodd"/>
-  <path d="M16 3a3 3 0 11-6 0 3 3 0 016 0z"/>
-</svg>
-                <strong>Trending</strong>
-            </div>
-        </a>
-        <a href="javascript:;" class="item"  data-toggle="modal" data-target="#actionSheetInset">
-            <div class="col">
-                <div class="action-button">
-                    <i class="icon ion-md-add"></i>
-                </div>
-            </div>
-        </a>
-        <a href="/notification" class="item navH">
-            <div class="col">
-                {{!-- <i class="icon ion-ios-chatboxes"></i> --}}
-                              <svg class="bi bi-bell" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 16a2 2 0 002-2H6a2 2 0 002 2z"/>
-  <path fill-rule="evenodd" d="M8 1.918l-.797.161A4.002 4.002 0 004 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 00-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 111.99 0A5.002 5.002 0 0113 6c0 .88.32 4.2 1.22 6z" clip-rule="evenodd"/>
-</svg>
-                <strong>Notification</strong>
-            </div>
-        </a>
-         <a href="/profile" class="item navH">
-            <div class="col">
-               
-     <svg class="bi bi-person" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 00.014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 00.022.004zm9.974.056v-.002.002zM8 7a2 2 0 100-4 2 2 0 000 4zm3-2a3 3 0 11-6 0 3 3 0 016 0z" clip-rule="evenodd"/>
-</svg>
-                <strong>Profile</strong>
-            </div>
-        </a>
 
-        
-   
-        
-    </div>
-    <!-- * App Bottom Menu -->
+    {{!-- <script src="../assets/js/lib/jquery-3.4.1.min.js"></script> --}}
 
-    <script src="../assets/js/lib/jquery-3.4.1.min.js"></script>
-    <!-- Bootstrap-->
-    <script src="../assets/js/lib/popper.min.js"></script>
-    <script src="../assets/js/lib/bootstrap.min.js"></script>
-    <!-- Owl Carousel -->
-    <script src="../assets/js/plugins/owl-carousel/owl.carousel.min.js"></script>
-    <!-- Base Js File -->
-    <script src="../assets/js/base.js"></script>
+
+    
+  <!-- Bootstrap core JavaScript-->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+
+  <!-- Custom scripts for all pages-->
+  <script src="../assets/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="../assets/vendor/chart.js/Chart.min.js"></script>
+
 
 </body>
 </html>
