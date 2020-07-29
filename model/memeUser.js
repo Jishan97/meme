@@ -29,6 +29,7 @@ const userschema = new Schema({
     },
     joining_date:{
         type:String,
+        default:'N/A'
     },
     user_achivements:[
         {
@@ -44,7 +45,7 @@ const userschema = new Schema({
     user_avatar:{
         type:String
     },
-
+    
     user_memes:[
         {
             id:{type:String},

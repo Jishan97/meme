@@ -31,14 +31,27 @@
     <p class="card-text  badge badge-secondary">Email - {{email}}</p>
     <p class="card-text  badge badge-secondary">Tag - {{user_tag}}</p>
     <p class="card-text  badge badge-secondary">Status - {{user_status}}</p>
+        <p class="card-text  badge badge-secondary">Joing Date - {{joining_date}}</p>
+
 <p class="card-text">{{meme_createdAt}}</p>
     {{!-- <button href="#" class="btn btn-primary imaged2">View</button> --}}
+     <div style="display: flex;justify-content: center; ">
         <form  style="margin: 5px;display: flex;justify-content: center;" action="/auth/authViewUsersMemes" method="POST">
             <input type="hidden" name="userID" value="{{email}}">
              <button type="submit" class="btn btn-info">View memes</button>
              
         </form>
+           <form  style="margin: 5px;display: flex;justify-content: center;" action="/auth/makeMemeStar" method="POST">
+            <input type="hidden" name="userID" value="{{email}}">
+             <button type="submit" class="btn btn-primary">Make Star</button>
+        </form>
 
+        </form>
+           <form  style="margin: 5px;display: flex;justify-content: center;" action="/auth/removeStar" method="POST">
+            <input type="hidden" name="userID" value="{{email}}">
+             <button type="submit" class="btn btn-primary">Remove star tag</button>
+        </form>
+</div>
     <div style="display: flex;justify-content: center; ">
       <form style="margin: 2px" action="/auth/authBlockuser" method="POST">
             <input type="hidden" name="userID" value="{{_id}}">

@@ -1,0 +1,35 @@
+
+<div class="container">
+  <br>
+    <h4 style="color: black">
+      {{#each data}}
+      Number of uploads for becomming Meme Star is <span >
+        {{NoOfUploads}}
+      </span> 
+      {{/each}}
+    </h4>
+    <div class="row">
+    <div class="col">
+        <form  action="/auth/MemeStar"  method="post">
+            
+  <div class="form-group">
+    <label for="exampleInputEmail1">Set upload limit</label>
+    <input type="text" class="form-control" name="uploadLimit" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter upload set">
+  </div>
+
+   <div class="form-group">
+    <label for="exampleInputEmail1">Achivements </label>
+    <input type="text" class="form-control" name="trophyPoints" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Add achivements">
+  </div>
+
+  
+  <button type="submit" class="btn btn-primary">update</button>
+
+  </form>
+    </div>
+</div>  
+<br>
+<h4>
+  Meme Star on rise
+</h4>
+</div>

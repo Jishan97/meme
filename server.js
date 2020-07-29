@@ -11,6 +11,7 @@ var { contactUs } = require("./model/contactUs");
 var { expoID } = require("./model/expoID");
 var { AllMemeTT } = require("./model/AllMemeTT");
 var { trophySegment } = require("./model/trophySegment");
+var { memeStar } = require("./model/memeStar");
 
 const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
@@ -129,6 +130,8 @@ app.get("/memeTrends", async (req, res) => {
   res.json(memeTrend);
 });
 
+
+
 app.get("/memeS", (req, res) => {
   res.render("memeS");
 });
@@ -172,17 +175,17 @@ app.get("/getTrendingMemesSingle", async (req, res) => {
   memeAtrending.map(one => {
     singleMeme.push(one.memeTrendS);
   });
+  
+  const finalSingleMeme = singleMeme[0]
 
-  singleMeme.map(one => {
     mainD.map(two => {
-      if (two.meme_trend == one) {
+      if (two.meme_trend == finalSingleMeme) {
         finalMemeSingle.push(two);
       }
     });
-  });
 
-  res.send(finalMemeSingle);
-  console.log(finalMemeSingle);
+console.log(finalMemeSingle);
+  res.json(finalMemeSingle);
 });
 
 // -------------------------   POST
@@ -218,13 +221,13 @@ app.post("/registerGoogle", async (req, res) => {
   console.log(username);
 
   const data = await MemeUser.find({ email });
-
-  if (!data) {
+  console.log(data);
+  if (data.length <= 0) {
     var user = new MemeUser({
       username,
       email,
       user_avatar,
-      joining_date:date
+      joining_date: date
     });
 
     user.save().then(result => {
@@ -232,6 +235,7 @@ app.post("/registerGoogle", async (req, res) => {
       res.json("done");
     });
   } else {
+    res.json("already exist");
     console.log("already exist");
   }
 });
@@ -255,7 +259,7 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
     const meme_type = req.body.type;
     console.log(meme_type);
     const meme_by = req.body.username;
-    const meme_trend = req.body.type;
+    const meme_trend = req.body.trend;
     var memeD = {
       meme_image,
       meme_title,
@@ -287,12 +291,12 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
     /// redirecting to notification area
 
     allMemes.save(result => {
-      // console.log(result)
+      res.json('success')
     });
 
-    res.json(result);
+    
   } catch (e) {
-    console.log(e);
+    res.json(e)
   }
   console.log(req.file.path);
 });
@@ -551,6 +555,26 @@ app.post("/sendPushNotification", async (req, res) => {
   res.redirect("/setMemeTrend");
 });
 
+// API SECTION
+// GET ALL USERS
+// GET
+
+app.get("/auth/getUsers", async (req, res) => {
+  const allUsers = await MemeUser.find({});
+  console.log(allUsers);
+  res.json(allUsers);
+});
+
+// API SECTION
+// GET SIngle user
+// GET
+
+app.post("/auth/getSingleUser", async (req, res) => {
+  const userEmail = req.body.email;
+  const allUsers = await MemeData.find({ meme_by: userEmail });
+  console.log('single user--------------------------',allUsers)
+  res.json(allUsers);
+});
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -574,21 +598,19 @@ app.get("/", (req, res) => {
   }
 });
 
-
 // ADMINDASHBOARD
 // GET
-app.get('/auth/adminDashboard', async(req,res)=>{
-
-  const user = await MemeUser.find({})
+app.get("/auth/adminDashboard", async (req, res) => {
+  const user = await MemeUser.find({});
   const totalUser = user.length;
   const date = new Date().toLocaleDateString();
   const joinedToday = [];
 
-  user.map((one)=>{
-    if(one.joining_date=== date){
-      joinedToday.push(one)
+  user.map(one => {
+    if (one.joining_date === date) {
+      joinedToday.push(one);
     }
-  })
+  });
   const totalJoinedToday = joinedToday.length;
   console.log(totalJoinedToday);
 
@@ -602,16 +624,13 @@ app.get('/auth/adminDashboard', async(req,res)=>{
     });
   });
 
-
-  res.render('adminDashboard',{
-    totalUser,joinedToday,memeTrendingArray,memeOfTheDay
-  })
-
-
-
-})
-
-
+  res.render("adminDashboard", {
+    totalUser,
+    joinedToday,
+    memeTrendingArray,
+    memeOfTheDay
+  });
+});
 
 // ADMIN SECTION
 // ADMIN LOGIN
@@ -711,9 +730,9 @@ app.get("/auth/getAllUsers", async (req, res) => {
 // GET
 
 app.get("/auth/trophySegment", async (req, res) => {
-  const getTrophySegment = await trophySegment.find({})
+  const getTrophySegment = await trophySegment.find({});
 
-  res.render("trophySegment",{
+  res.render("trophySegment", {
     getTrophySegment
   });
 });
@@ -722,43 +741,39 @@ app.get("/auth/trophySegment", async (req, res) => {
 // trophySegment
 // POST
 
-app.post("/auth/trophySegment", upload.single("image"),async (req, res) => {
+app.post("/auth/trophySegment", upload.single("image"), async (req, res) => {
   const result = await cloudinary.uploader.upload(req.file.path);
-  const trophyImage = result.secure_url; 
+  const trophyImage = result.secure_url;
   const trophyPoints = req.body.trophyPoints;
   const trophyType = req.body.trophyType;
-  const trophyName = req.body.trophyName
+  const trophyName = req.body.trophyName;
 
-  const getTrophySegment = await trophySegment.find({trophyType})
+  const getTrophySegment = await trophySegment.find({ trophyType });
 
-  if(getTrophySegment.length > 0){
-    trophySegment.findOneAndUpdate({ trophyType }, { $set: {  trophyImage,trophyPoints,trophyName} })
-    .then(url => {
-      console.log(url);
-      res.redirect('/auth/trophySegment')
-    })
-
-
-  }
-
-  else{
+  if (getTrophySegment.length > 0) {
+    trophySegment
+      .findOneAndUpdate(
+        { trophyType },
+        { $set: { trophyImage, trophyPoints, trophyName } }
+      )
+      .then(url => {
+        console.log(url);
+        res.redirect("/auth/trophySegment");
+      });
+  } else {
     const data = new trophySegment({
-      trophyImage,trophyPoints,trophyType,trophyName
-    })
+      trophyImage,
+      trophyPoints,
+      trophyType,
+      trophyName
+    });
 
-    data.save().then((result)=>{
+    data.save().then(result => {
       console.log(result);
-      res.redirect('/auth/trophySegment')
-    })
+      res.redirect("/auth/trophySegment");
+    });
   }
-
-
-
 });
-
-
-
-
 
 app.post("/auth/authViewUsersMemes", async (req, res) => {
   const data = await MemeData.find({ meme_by: req.body.userID });
@@ -795,6 +810,74 @@ app.post("/auth/authUnBlockuser", async (req, res) => {
       }
     }
   );
+});
+
+// app.get('/auth/memeStarPage',(req,res)=>{
+
+// })
+
+app.get("/auth/memeStarPage", async (req, res) => {
+  const data = await memeStar.find({});
+  res.render("memeStar", {
+    data
+  });
+});
+
+app.post("/auth/makeMemeStar", async (req, res) => {
+  MemeUser.findOneAndUpdate(
+    { email: req.body.userID },
+    { user_tag: "memeStar" },
+    function(err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/auth/getAllUsers");
+      }
+    }
+  );
+
+  const user = MemeUser.find({ email: req.body.userID });
+  console.log(user);
+});
+
+app.post("/auth/removeStar", async (req, res) => {
+  MemeUser.findOneAndUpdate(
+    { email: req.body.userID },
+    { user_tag: "noob" },
+    function(err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/auth/getAllUsers");
+      }
+    }
+  );
+
+  const user = MemeUser.find({ email: req.body.userID });
+  console.log(user);
+});
+
+// console.log(data1)
+
+app.post("/auth/MemeStar", async (req, res) => {
+  const noOfUploads = req.body.uploadLimit;
+  const checkData = await memeStar.find({});
+  // console.log(noOfUploads)
+  const filter = { role: "admin" };
+  const update = { NoOfUploads: noOfUploads };
+
+  if (checkData.length <= 0) {
+    var data = new memeStar({
+      NoOfUploads: noOfUploads
+    });
+
+    data.save().then(one => {
+      res.redirect("/auth/memeStarPage");
+    });
+  } else {
+    await memeStar.findOneAndUpdate(filter, update);
+    res.redirect("/auth/memeStarPage");
+  }
 });
 
 const port = process.env.PORT || 3000;
