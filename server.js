@@ -101,7 +101,7 @@ app.post("/getAllmemes", async (req, res) => {
       const allMemes = await MemeData.find().sort({ _id: -1 });
       res.json(allMemes);
     } catch (error) {
-      console.log(error.message);
+      res.status(500).send('Something broke!')
     }
   } else {
     // not login
@@ -116,18 +116,31 @@ app.post("/getAllmemes", async (req, res) => {
 //  API end point | meme tags
 // start -------------------------
 app.get("/memeTags", async (req, res) => {
-  const memeTag = await AllMemeTT.find({ memeTT: "memeTag" });
-  console.log(memeTag);
-  res.json(memeTag);
+  try {
+    
+    const memeTag = await AllMemeTT.find({ memeTT: "memeTag" });
+    console.log(memeTag);
+    res.json(memeTag);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
 });
 
 // -------------------------   GET
 //  API end point | meme trends
 // start -------------------------
 app.get("/memeTrends", async (req, res) => {
-  const memeTrend = await AllMemeTT.find({ memeTT: "memeTrend" });
-  console.log(memeTrend);
-  res.json(memeTrend);
+
+  try {
+
+    const memeTrend = await AllMemeTT.find({ memeTT: "memeTrend" });
+    console.log(memeTrend);
+    res.json(memeTrend);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
 });
 
 
@@ -141,51 +154,62 @@ app.get("/memeS", (req, res) => {
 // start -------------------------
 
 app.get("/getTrendingMemesArray", async (req, res) => {
-  const mainD = await MemeData.find({});
 
-  const memeAtrending = await adminSetMTT.find({});
+  try{
 
-  const memeArray = [];
-  const finalMemeArray = []; /* Final data for array of trending memes*/
-
-  memeAtrending.map(one => {
-    memeArray.push(one.memeTrendSA);
-  });
-  memeArray[0].map(one => {
-    mainD.map(two => {
-      if (two.meme_trend == one) {
-        finalMemeArray.push(two);
-      }
+    const mainD = await MemeData.find({});
+  
+    const memeAtrending = await adminSetMTT.find({});
+  
+    const memeArray = [];
+    const finalMemeArray = []; /* Final data for array of trending memes*/
+  
+    memeAtrending.map(one => {
+      memeArray.push(one.memeTrendSA);
     });
-  });
-  console.log(finalMemeArray);
-  res.json(finalMemeArray);
+    memeArray[0].map(one => {
+      mainD.map(two => {
+        if (two.meme_trend == one) {
+          finalMemeArray.push(two);
+        }
+      });
+    });
+    res.json(finalMemeArray);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
 });
 
 // -------------------------   GET
 //  API end point | Get Single trending meme | meme of the day
 // start -------------------------
 app.get("/getTrendingMemesSingle", async (req, res) => {
-  const mainD = await MemeData.find({});
+  try{
 
-  const memeAtrending = await adminSetMTT.find({});
-
-  const singleMeme = [];
-  const finalMemeSingle = []; /* final data for single trendig meme */
-  memeAtrending.map(one => {
-    singleMeme.push(one.memeTrendS);
-  });
+    const mainD = await MemeData.find({});
   
-  const finalSingleMeme = singleMeme[0]
-
-    mainD.map(two => {
-      if (two.meme_trend == finalSingleMeme) {
-        finalMemeSingle.push(two);
-      }
+    const memeAtrending = await adminSetMTT.find({});
+  
+    const singleMeme = [];
+    const finalMemeSingle = []; /* final data for single trendig meme */
+    memeAtrending.map(one => {
+      singleMeme.push(one.memeTrendS);
     });
-
-console.log(finalMemeSingle);
-  res.json(finalMemeSingle);
+    
+    const finalSingleMeme = singleMeme[0]
+  
+      mainD.map(two => {
+        if (two.meme_trend == finalSingleMeme) {
+          finalMemeSingle.push(two);
+        }
+      });
+  
+    res.json(finalMemeSingle);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
 });
 
 // -------------------------   POST
@@ -195,16 +219,22 @@ console.log(finalMemeSingle);
 app.post("/userMemes", async (req, res) => {
   const user = req.body.email;
   if (user) {
-    const data = await MemeUser.find({ email: user });
-    const userAllMemes = [];
-    let FinalUserAllMemes = [];
+    try{
 
-    data.map(one => {
-      userAllMemes.push(one.user_memes);
-    });
-    FinalUserAllMemes = userAllMemes[0];
-    console.log(FinalUserAllMemes);
-    res.json(FinalUserAllMemes);
+      const data = await MemeUser.find({ email: user });
+      const userAllMemes = [];
+      let FinalUserAllMemes = [];
+  
+      data.map(one => {
+        userAllMemes.push(one.user_memes);
+      });
+      FinalUserAllMemes = userAllMemes[0];
+      console.log(FinalUserAllMemes);
+      res.json(FinalUserAllMemes);
+    }
+    catch (error) {
+      res.status(500).send('Something broke!')
+    }
   } else {
     res.sendStatus(403);
   }
@@ -214,29 +244,33 @@ app.post("/userMemes", async (req, res) => {
 //  API end point | register with google
 // start -------------------------
 app.post("/registerGoogle", async (req, res) => {
+
   const date = new Date().toLocaleDateString();
   const username = req.body.username;
   const email = req.body.email;
   const user_avatar = req.body.userAvatar;
-  console.log(username);
-
   const data = await MemeUser.find({ email });
-  console.log(data);
-  if (data.length <= 0) {
-    var user = new MemeUser({
-      username,
-      email,
-      user_avatar,
-      joining_date: date
-    });
 
-    user.save().then(result => {
-      console.log(result);
-      res.json("done");
-    });
-  } else {
-    res.json("already exist");
-    console.log("already exist");
+  try{
+
+    if (data.length <= 0) {
+      var user = new MemeUser({
+        username,
+        email,
+        user_avatar,
+        joining_date: date
+      });
+  
+      user.save().then(result => {
+        console.log(result);
+        res.json("done");
+      });
+    } else {
+    res.json({msg:'already exits'})  
+     }
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
   }
 });
 
@@ -245,7 +279,6 @@ app.post("/registerGoogle", async (req, res) => {
 // start -------------------------
 
 app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
-  console.log("getting req");
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
       quality: "auto",
@@ -298,7 +331,7 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
   } catch (e) {
     res.json(e)
   }
-  console.log(req.file.path);
+  
 });
 
 // -------------------------   POST
@@ -306,44 +339,65 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
 // start -------------------------
 
 app.get("/GetdankMemes", async (req, res) => {
-  const allMemes = await MemeData.find({ meme_type: "#dank" });
+  try {
 
-  res.json(allMemes);
+    const allMemes = await MemeData.find({ meme_type: "#dank" });
+    res.json(allMemes);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
+
 });
 
 app.get("/GetindianMemes", async (req, res) => {
-  const allMemes = await MemeData.find({ meme_type: "#indian" });
-  res.json(allMemes);
+  try{
+    const allMemes = await MemeData.find({ meme_type: "#indian" });
+    res.json(allMemes);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
+
 });
 
 app.get("/GetfunnyMemes", async (req, res) => {
-  const allMemes = await MemeData.find({ meme_type: "#funny" });
-  res.json(allMemes);
+  try{
+    const allMemes = await MemeData.find({ meme_type: "#funny" });
+    res.json(allMemes);    
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
+
 });
 
 app.get("/GetadultMemes", async (req, res) => {
-  const allMemes = await MemeData.find({ meme_type: "#adult" });
-  res.json(allMemes);
+  try{
+    const allMemes = await MemeData.find({ meme_type: "#adult" });
+    res.json(allMemes);
+  }
+  catch (error) {
+    res.status(500).send('Something broke!')
+  }
+
 });
 
 // -------------------------   GET
 //  API end point | Setting meme trends
 // start -------------------------
 app.get("/setMemeTrend", async (req, res) => {
+  
   const data = await AllMemeTT.find({}).sort({ _id: -1 });
   const data1 = await AllMemeTT.find({ memeTT: "memeTrend" });
-
   const memeAtrendingSingle = await adminSetMTT.find({});
-
   const memeTrendingArray = [];
-
   memeAtrendingSingle.map(one => {
     one.memeTrendSA.map(one => {
       memeTrendingArray.push(one);
     });
   });
-  console.log(memeTrendingArray);
-
+  
   res.render("setMemeTrend", {
     data,
     data1,
@@ -491,6 +545,12 @@ app.get("/joinUs", (req, res) => {
 
 // push notification expo
 
+
+app.get('/auth/notification',(req,res)=>{
+  res.render('notification')
+})
+
+
 app.post("/expoPush", async (req, res) => {
   const fetchedData = await expoID.find({});
   let expoIDdata = req.body.expoID;
@@ -511,10 +571,12 @@ app.post("/expoPush", async (req, res) => {
   });
 });
 
-app.post("/sendPushNotification", async (req, res) => {
+app.post("/auth/sendPushNotification", async (req, res) => {
   const data = await expoID.find({});
+
   let title = req.body.title;
   let body = req.body.body1;
+console.log(title)
   let expoIDs = [];
 
   data.map(one => {
@@ -552,7 +614,7 @@ app.post("/sendPushNotification", async (req, res) => {
     }
   })();
 
-  res.redirect("/setMemeTrend");
+  res.redirect("/auth/notification");
 });
 
 // API SECTION
@@ -678,7 +740,7 @@ app.post("/auth/validateAdmin", (req, res) => {
     authTokens[authToken] = email;
     res.cookie("AuthToken", authToken);
 
-    res.redirect("/");
+    res.redirect("/");``
   } else if (email === mangerEmail && password === managerPassword) {
     req.session.role = "manager";
     const authToken = generateAuthToken();

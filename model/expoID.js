@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const expoIDS = new Schema({
   
     expoid:{
-        type:String,
-        unique: true
+        type:String
     }
  
  })
