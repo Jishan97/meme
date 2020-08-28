@@ -646,7 +646,8 @@ app.post("/auth/getSingleUser", async (req, res) => {
 
 app.get('/api/mainScreenOverlayPoster', async(req,res)=>{
   const data = await screenOverlay.find({})
-  res.json(data)
+  console.log(data[0]);
+  res.json(data[0])
 })
 
 
