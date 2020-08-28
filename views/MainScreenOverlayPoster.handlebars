@@ -1,0 +1,63 @@
+<div class="container">
+    
+<div class="row">
+    {{#each mainSreenOverlayPoster}}
+    <div class="col-sm-4">
+        <div class="card" style="width: 18rem;">
+       <style>
+                                    .imaged1{
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    transition: .5s linear;
+                                    border: 2px solid black
+                                    }
+                                    </style>
+                                    
+                                    <div class="modal fade" role="dialog" id="imgmodal">
+    <div style="top:20%" class="modal-dialog">
+        <div class="modal-content"></div>          
+                    <img class="" src="" id="show-img">         
+        </div>
+    </div>
+  <img class="card-img-top img-fluid imaged1" src="{{posterImage}}" alt="Card image cap">
+  <div class="card-body">
+          <p class="card-text  badge badge-secondary">Name - {{posterName}}</p>
+    <h5 class="card-title badge badge-secondary">Description - {{posterDescription}}</h5>
+
+  </div>
+</div>
+    </div>
+    {{/each}}
+</div>
+
+
+
+
+
+
+
+    <div class="row">
+    <div class="col">
+        <form  action="/auth/MainScreenOverlayPoster"  method="post" enctype="multipart/form-data" >
+            
+  <div class="form-group">
+    <label for="exampleInputEmail1">Poster Name</label>
+    <input type="text" class="form-control" name="posterName" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter poster name">
+  </div>
+
+   <div class="form-group">
+    <label for="exampleInputEmail1">Poster Description</label>
+    <input type="text" class="form-control" name="posterDescription" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter poster description">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Poster image</label>
+    <input id="file-upload"  type="file" accept="image/*"  name="image"  class="form-control-file" id="exampleFormControlFile1">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+  </form>
+    </div>
+</div>
+</div>

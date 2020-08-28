@@ -12,6 +12,7 @@ var { expoID } = require("./model/expoID");
 var { AllMemeTT } = require("./model/AllMemeTT");
 var { trophySegment } = require("./model/trophySegment");
 var { memeStar } = require("./model/memeStar");
+var { screenOverlay } = require("./model/ScreenOverlay");
 
 const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
@@ -637,6 +638,20 @@ app.post("/auth/getSingleUser", async (req, res) => {
   console.log('single user--------------------------',allUsers)
   res.json(allUsers);
 });
+
+
+//API SECTION
+// GET Main screen overlay poster
+// GET
+
+app.get('/api/mainScreenOverlayPoster', async(req,res)=>{
+  const data = await screenOverlay.find({})
+  res.json(data)
+})
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -941,6 +956,62 @@ app.post("/auth/MemeStar", async (req, res) => {
     res.redirect("/auth/memeStarPage");
   }
 });
+
+
+
+
+app.get('/auth/MainScreenOverlayPoster', async(req,res)=>{
+  const mainSreenOverlayPoster = await screenOverlay.find({ });
+
+    res.render('MainScreenOverlayPoster',{
+      mainSreenOverlayPoster
+    })
+
+})
+
+
+app.post('/auth/MainScreenOverlayPoster', upload.single("image"), async(req,res)=>{
+
+  const result = await cloudinary.uploader.upload(req.file.path);
+  const posterImage = result.secure_url;
+  const {posterName, posterDescription} = req.body
+
+  const mainSreenOverlayPoster = await screenOverlay.find({});
+
+  if (mainSreenOverlayPoster.length > 0) {
+
+           screenOverlay.remove()
+           .then(url => {
+            console.log('Removed',url);
+          });
+           const data = new screenOverlay({
+            posterImage,
+            posterName,
+            posterDescription
+          });
+          data.save().then(result => {
+            console.log(result);
+            res.redirect("/auth/MainScreenOverlayPoster");
+          });
+   
+  } else {
+    const data = new screenOverlay({
+      posterImage,
+      posterName,
+      posterDescription
+    });
+    data.save().then(result => {
+      console.log(result);
+      res.redirect("/auth/MainScreenOverlayPoster");
+    });
+  }
+
+})
+
+
+
+
+
 
 const port = process.env.PORT || 3000;
 
