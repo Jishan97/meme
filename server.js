@@ -222,7 +222,7 @@ app.post("/userMemes", async (req, res) => {
   if (user) {
     try{
 
-      const data = await MemeUser.find({ email: user });
+      const data = await MemeUser.find({ email: user }).sort(-1);
       const userAllMemes = [];
       let FinalUserAllMemes = [];
   
@@ -1011,6 +1011,16 @@ app.post('/auth/MainScreenOverlayPoster', upload.single("image"), async(req,res)
 
 
 
+
+app.get('/auth/destroyAllMemes',async(req,res)=>{
+     
+  const data = await MemeData.remove()
+  res.redirect("/auth/allMemes");
+
+
+
+
+})
 
 
 
