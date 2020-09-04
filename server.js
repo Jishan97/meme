@@ -222,7 +222,7 @@ app.post("/userMemes", async (req, res) => {
   if (user) {
     try{
 
-      const data = await MemeUser.find({ email: user }).sort(-1);
+      const data = await MemeUser.find({ email: user }).sort({ _id: -1 });
       const userAllMemes = [];
       let FinalUserAllMemes = [];
   
