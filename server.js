@@ -291,6 +291,7 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
     const meme_title = req.body.title;
     const meme_description = req.body.description;
     const meme_type = req.body.type;
+    const meme_by_avatar = req.body.userImage
     console.log(meme_type);
     const meme_by = req.body.username;
     const meme_trend = req.body.trend;
@@ -319,7 +320,8 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
       meme_type,
       meme_by,
       meme_trend,
-      meme_createdAt
+      meme_createdAt,
+      meme_by_avatar
     });
 
     /// redirecting to notification area
@@ -338,11 +340,12 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
 // -------------------------   POST
 //  API end point | memes category
 // start -------------------------
-
+ 
 app.get("/GetdankMemes", async (req, res) => {
   try {
 
     const allMemes = await MemeData.find({ meme_type: "#dank" });
+
     res.json(allMemes);
   }
   catch (error) {

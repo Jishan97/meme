@@ -15,7 +15,8 @@ const memeCollection = new Schema({
             meme_shared:{type:String},
             meme_status:{type:String},
             meme_by:{type:String},
-            meme_trend:{type:String}
+            meme_trend:{type:String},
+            meme_by_avatar:{type:String}
  
 
 })
