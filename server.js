@@ -287,7 +287,7 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
     });
     const meme_createdAt = new Date().toLocaleDateString();
     const meme_image = result.secure_url;
-    const email = req.body.username;
+    const email = req.body.email;
     const meme_title = req.body.title;
     const meme_description = req.body.description;
     const meme_type = req.body.type;
