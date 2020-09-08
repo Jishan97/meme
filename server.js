@@ -292,6 +292,7 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
     const meme_description = req.body.description;
     const meme_type = req.body.type;
     const meme_by_avatar = req.body.userImage
+    const meme_by_username = req.body.username
     console.log(meme_type);
     const meme_by = req.body.username;
     const meme_trend = req.body.trend;
@@ -321,8 +322,11 @@ app.post("/imageUploadTrial", upload.single("imageData"), async (req, res) => {
       meme_by,
       meme_trend,
       meme_createdAt,
-      meme_by_avatar
+      meme_by_avatar,
+      meme_by_username
     });
+
+
 
     /// redirecting to notification area
 
