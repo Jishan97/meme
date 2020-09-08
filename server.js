@@ -222,7 +222,8 @@ app.post("/userMemes", async (req, res) => {
   if (user) {
     try{
 
-      const data = await MemeUser.find({ email: user }).sort({ _id: -1 });
+      const data = await MemeUser.find({ email: user })
+  
       const userAllMemes = [];
       let FinalUserAllMemes = [];
   
@@ -231,7 +232,7 @@ app.post("/userMemes", async (req, res) => {
       });
       FinalUserAllMemes = userAllMemes[0];
       console.log(FinalUserAllMemes);
-      res.json(FinalUserAllMemes);
+      res.json(FinalUserAllMemes.reverse());
     }
     catch (error) {
       res.status(500).send('Something broke!')
