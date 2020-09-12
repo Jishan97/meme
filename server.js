@@ -398,9 +398,13 @@ app.get("/GetadultMemes", async (req, res) => {
 app.get("/setMemeTrend", async (req, res) => {
   
   const data = await AllMemeTT.find({}).sort({ _id: -1 });
+
   const data1 = await AllMemeTT.find({ memeTT: "memeTrend" });
+
   const memeAtrendingSingle = await adminSetMTT.find({});
+
   const memeTrendingArray = [];
+  
   memeAtrendingSingle.map(one => {
     one.memeTrendSA.map(one => {
       memeTrendingArray.push(one);
@@ -673,9 +677,27 @@ app.get('/api/mainScreenOverlayPoster', async(req,res)=>{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+app.use('/api/admin',require('./routes/admin/Admin'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ADMIN SECTION
 // ENTRY
 // GET
+
+
 app.get("/", (req, res) => {
   if (req.user) {
     res.redirect("/auth/adminDashboard");
@@ -686,6 +708,8 @@ app.get("/", (req, res) => {
 
 // ADMINDASHBOARD
 // GET
+
+
 app.get("/auth/adminDashboard", async (req, res) => {
   const user = await MemeUser.find({});
   const totalUser = user.length;
@@ -717,6 +741,8 @@ app.get("/auth/adminDashboard", async (req, res) => {
     memeOfTheDay
   });
 });
+
+
 
 // ADMIN SECTION
 // ADMIN LOGIN
@@ -1032,7 +1058,7 @@ app.get('/auth/destroyAllMemes',async(req,res)=>{
 
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
   console.log(`running on ${port}`);
