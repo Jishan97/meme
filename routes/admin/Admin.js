@@ -9,9 +9,7 @@ var { MemeData } = require("../../model/memeCollection");
 var { MemeUser } = require("../../model/memeUser");
 
 
-
 router.post('/',(req,res)=>{
-
     let Cemail = config.get("adminEmail")
     let Cpassword = config.get("adminPassword")
 
@@ -29,6 +27,9 @@ router.post('/',(req,res)=>{
              if(err) throw err;
              res.json({token});
           })
+    }
+    else {
+        res.json('invalid')
     }
 
 
@@ -61,39 +62,199 @@ router.get('/getAllMemes',auth,async(req,res)=>{
         if(email == config.get('adminEmail')){
             const allUsers = await MemeUser.find({});
             const allMemes = [];
-            allUsers.map((one)=>{
-                allMemes.push(one.user_memes)
-            })
-
-            res.json(allMemes[0]);
-        }
-        else{
-            res.json('invalid')
-        }
-    }
-    catch(e){
-        console.log(e)
-    }
-})
-
-router.get('/getAllUsers',auth,async(req,res)=>{
-    const email = req.email.id;
-    try{
-        if(email == config.get('adminEmail')){
-            const allUsers = await MemeUser.find({});
-
             res.json(allUsers);
+        
+                }
+                else{
+                    res.json('invalid')
+                }
+            }
+            catch(e){
+                console.log(e)
+            }
+        })
+
+                    
+
+            
+////////// block ||  unblock  || delete user ////////////////////////
+////////// block ||  unblock  || delete user ////////////////////////
+//Block user
+router.get('/blockUser/:userID',(req,res)=>{
+    MemeUser.findOneAndUpdate(
+        {email:req.params.userID},
+        { user_status: "block" },
+        function(err, docs) {
+          if (err) {
+            res.status(500).send(err,'server error')
+          } else {
+                res.json(docs)
         }
-        else{
-            res.json('invalid')
         }
-    }
-    catch(e){
-        console.log(e)
+      );
+})
+//ublock user
+router.get('/UnBlockUser/:userID',auth,(req,res)=>{
+  
+    MemeUser.findOneAndUpdate(
+        {email:req.params.userID},
+        { user_status: "unblock" },
+        function(err, docs) {
+          if (err) {
+            res.status(500).send(err,'server error')
+          } else {
+                res.json(docs)
+        }
+        }
+      );
+})
+//delete user
+router.get('/deleteUser/:userID',auth,async(req,res)=>{
+    try{
+        const deletedUser = await  MemeUser.findOneAndDelete({email:req.params.userID})
+        res.json(deletedUser)
+    } catch(err){
+        res.status(500).send(err,'server error')
     }
 })
 
 
+////////// block and unblock  || delete user  ////////////////////////
+////////// block and unblock  || delete user ////////////////////////
+
+
+
+
+
+
+//get all meme star
+//POST API
+router.get('/userTag/:userTag',auth,async(req,res)=>{
+    try{
+        const getAllMemeStar = await  MemeUser.find({user_tag:req.params.userTag})
+        res.json(getAllMemeStar)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+//get all blocked users || unblocked users
+//GET API
+router.get('/userStatus/:userStatus',auth,async(req,res)=>{
+
+    try{
+        const users = await  MemeUser.find({user_status:req.params.userStatus})
+        res.json(users)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+//Make meme star  || noob || memestar 
+//PUT API
+router.put('/userTag',auth,async(req,res)=>{
+    // get the meme star tag
+    const userTag = req.body.userTag;
+    const userEmail = req.body.userEmail;
+    try{
+        const filter = {email:userEmail}
+        const update = {user_tag:userTag}
+        const data = await MemeUser.findOneAndUpdate(filter, update);
+        res.json(data)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+
+
+
+
+//get all memes 
+//GET API
+router.get('/memes',async(req,res)=>{
+    try{
+        const memes = await  MemeUser.find({},{user_memes:1})
+        const trial = memes[0];
+        res.json(trial.user_memes)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// Approved / Dissaproved Memes ////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+router.post('/approveMeme',async(req,res)=>{
+    
+    try{
+        const memeID = req.body.memeID;
+        const memes = await  MemeUser.update({
+            "user_memes._id":memeID
+        },{
+            "$set":{
+                "user_memes.$.meme_status":"approved"
+            }
+        })
+        res.json(memes)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+
+router.post('/DissApproveMeme',async(req,res)=>{
+    try{
+        const memeID = req.body.memeID;
+        const memes = await  MemeUser.update({
+            "user_memes._id":memeID
+        },{
+            "$set":{
+                "user_memes.$.meme_status":"dissapproved"
+            }
+        })
+        res.json(memes)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// Approved / Dissaproved Memes ////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+//Set meme of the day
+//POST api
+
+router.post("/setMemeOfTheDay",async(req,res)=>{
+    //get meme id
+    const memeID = req.body.memeID;
+    const data = await MemeUser.find({
+        "user_memes._id":memeID
+    })
+    console.log(data)
+    res.json(data)
+})
+
+
+
+
+    
 
 
 

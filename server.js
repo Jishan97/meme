@@ -85,7 +85,7 @@ app.use(bodyParser.json()).use(
 
 app.use(express.static(__dirname + "/public"));
 
-app.use(checkNet);
+// app.use(checkNet);
 
 app.get("/index", (req, res) => {
   res.render("index");
@@ -678,15 +678,16 @@ app.get('/api/mainScreenOverlayPoster', async(req,res)=>{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+// Admin login / Auth
 app.use('/api/admin',require('./routes/admin/Admin'))
 
+//Admin control
+app.use('/api/admin/adminControl',require('./routes/admin/AdminControl'))
 
 
-
-
-
-
-
+//Admin || Users
+app.use('/api/admin/users',require('./routes/admin/Users'))
 
 
 
@@ -696,6 +697,8 @@ app.use('/api/admin',require('./routes/admin/Admin'))
 // ADMIN SECTION
 // ENTRY
 // GET
+
+
 
 
 app.get("/", (req, res) => {

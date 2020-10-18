@@ -1,5 +1,5 @@
 {
-    "adminEmail":"admin@addmin.com",
+    "adminEmail":"admin@admin.com",
     "adminPassword":"admin",
     "jwtSecret":"memesclan"
 }
