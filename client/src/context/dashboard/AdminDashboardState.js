@@ -29,6 +29,7 @@ import {
         APPROVE_MEME,
         DISSAPPROVE_MEME,
         UPDATE_USER_TAG,
+        SET_GOOGLE_ADS,
         SET_LOADING, SET_ERROR, CLEAR_ERROR, GET_TROPHY_SEGMENT
 } from './type'
 import { stat } from 'fs';
@@ -59,7 +60,10 @@ const AdminDashboardState = props => {
                 upcomingEvents: [],
                 //total user
                 totalUser: '',
-                userJoinedToday:''
+                userJoinedToday:'',
+                googleAds:false,
+                UserByTag:[],
+                UserByStatus:[]
 
         }
 
@@ -73,7 +77,8 @@ const AdminDashboardState = props => {
                 }
                 setLoading();
                 try {
-                        const res = await axios.get('/api/admin/adminControl/getAllMemes');
+                        const res = await axios.get('/api/admin/getAllMemes');
+                        console.log(res.data)
                         dispatch({
                                 type: GET_ALL_MEMES,
                                 payload: res.data
@@ -86,61 +91,50 @@ const AdminDashboardState = props => {
                 }
         }
 
-        //Get user by user_tag
-        //get all meme star || noob
-        const getUserByUserTag = async()=>{
-                if (localStorage.token) {
-                        setAuthToken(localStorage.token)
-                }
-                setLoading();
-                try {
-                        const res = await axios.get('/api/admin/userTag/memestar');
-                        dispatch({
-                                type: GET_USER_BY_USER_TAG,
-                                payload: res.data
-                        })
-                } catch (err) {
-                        dispatch({
-                                type: SET_ERROR,
-                                payload: err.response
-                        })
-                }
-        }
+        // //Get user by user_tag
+        // //get all meme star || noob
+        // const getUserByUserTag = async()=>{
+        //         if (localStorage.token) {
+        //                 setAuthToken(localStorage.token)
+        //         }
+        //         setLoading();
+        //         try {
+        //                 const res = await axios.get('/api/admin/userTag/memestar');
+        //                 dispatch({
+        //                         type: GET_USER_BY_USER_TAG,
+        //                         payload: res.data
+        //                 })
+        //         } catch (err) {
+        //                 dispatch({
+        //                         type: SET_ERROR,
+        //                         payload: err.response
+        //                 })
+        //         }
+        // }
 
-        //Get user by user_status
-        //get all blocked users || unblocked users
-        const getUserByUserStatus = async()=>{
-                if (localStorage.token) {
-                        setAuthToken(localStorage.token)
-                }
-                setLoading();
-                try {
-                        const res = await axios.get('/api/admin/userStatus/memestar');
-                        dispatch({
-                                type: GET_USER_BY_USER_STATUS,
-                                payload: res.data
-                        })
-                } catch (err) {
-                        dispatch({
-                                type: SET_ERROR,
-                                payload: err.response
-                        })
-                }
-        }
+        // //Get user by user_status
+        // //get all blocked users || unblocked users
+        // const getUserByUserStatus = async()=>{
+        //         if (localStorage.token) {
+        //                 setAuthToken(localStorage.token)
+        //         }
+        //         setLoading();
+        //         try {
+        //                 const res = await axios.get('/api/admin/userStatus/memestar');
+        //                 dispatch({
+        //                         type: GET_USER_BY_USER_STATUS,
+        //                         payload: res.data
+        //                 })
+        //         } catch (err) {
+        //                 dispatch({
+        //                         type: SET_ERROR,
+        //                         payload: err.response
+        //                 })
+        //         }
+        // }
 
 
-        const approveMeme = ()=>{
-
-        }
-
-        const dissApproveMeme =()=>{
-
-        }
-
-        const UpdateUserTag = ()=>{
-
-        }
-
+    
 
         ////////////////////////USER//////////////////////
         ////////////////////////USER//////////////////////
@@ -483,7 +477,112 @@ const AdminDashboardState = props => {
 
 
 
+        const approveMeme = async(ID)=>{
+                if (localStorage.token) {
+                        setAuthToken(localStorage.token)
+                }
+                const config = {
+                        headers: {
+                                'Content-Type': 'application/json'
+                        }
+                }
+                setLoading();
+                try {
+                        const res = await axios.get(`/api/admin/approveMeme/${ID}`);
+                        dispatch({
+                                type: APPROVE_MEME,
+                                payload: res.data
+                        })
+                        getAllMemes()
 
+                } catch (err) {
+                        dispatch({
+                                type: SET_ERROR,
+                                payload: err.response
+                        })
+                }
+        }
+
+        const dissApproveMeme =async(ID)=>{
+                if (localStorage.token) {
+                        setAuthToken(localStorage.token)
+                }
+                const config = {
+                        headers: {
+                                'Content-Type': 'application/json'
+                        }
+                }
+                setLoading();
+                try {
+                        const res = await axios.get(`/api/admin/DissApproveMeme/${ID}`);
+                        dispatch({
+                                type: DISSAPPROVE_MEME,
+                                payload: res.data
+                        })
+                        getAllMemes()
+
+                } catch (err) {
+                        dispatch({
+                                type: SET_ERROR,
+                                payload: err.response
+                        })
+                }
+        }
+
+
+//Get user by user tag
+        //GET API
+
+        const getUserByTag =async (tag)=>{
+                console.log(tag)
+                if (localStorage.token) {
+                        setAuthToken(localStorage.token)
+                }
+                setLoading();
+                try {
+                        const res = await axios.get(`/api/admin/userTag/${tag}`);
+                        dispatch({
+                                type: GET_USER_BY_USER_TAG,
+                                payload: res.data
+                        })
+                        getAllMemes()
+
+                } catch (err) {
+                        dispatch({
+                                type: SET_ERROR,
+                                payload: err.response
+                        })
+                }
+        }
+
+        //get user status
+        //GET API
+
+        const getUserByStatus = async(status)=>{
+                if (localStorage.token) {
+                        setAuthToken(localStorage.token)
+                }
+                setLoading();
+                try {
+                        const res = await axios.get(`/api/admin/userStatus/${status}`);
+                        dispatch({
+                                type: GET_USER_BY_USER_STATUS,
+                                payload: res.data
+                        })
+                        getAllMemes()
+
+                } catch (err) {
+                        dispatch({
+                                type: SET_ERROR,
+                                payload: err.response
+                        })
+                }
+        }
+
+         
+
+        
+        
 
         //loading
         const setLoading = () => {
@@ -510,6 +609,9 @@ const AdminDashboardState = props => {
                                 upcomingEvents: state.upcomingEvents,
                                 userJoinedToday:state.userJoinedToday,
                                 totalUser:state.totalUser,
+                                allMemes:state.allMemes,
+                                UserByTag:state.UserByTag,
+                                UserByStatus:state.UserByStatus,
 
                                 //functions
                                 getMemeTags,
@@ -529,8 +631,10 @@ const AdminDashboardState = props => {
                                 getUserJoinedToday,
                                 approveMeme,
                                 dissApproveMeme,
-                                UpdateUserTag,
-                                setLoading
+                                setLoading,
+                                getAllMemes,
+                                getUserByTag,
+                                getUserByStatus
 
                         }}
                 >

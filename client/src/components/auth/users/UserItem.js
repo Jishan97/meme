@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import AdminContext from '../../../context/AdminContext'
 
 const UserItem = (props) => {
-    const {email,username,user_tag,joining_date,user_avatar} = props.user;
+    const {email,username,user_tag,joining_date,user_avatar,user_status} = props.user;
 
     const adminContet = useContext(AdminContext);
     const {deleteUser} = adminContet;
@@ -27,6 +27,9 @@ const UserItem = (props) => {
         </p>
         <p>
           Tag: {user_tag}
+        </p>
+        <p>
+          Status: {user_status}
         </p>
         <p>
           Joining Date: {joining_date}

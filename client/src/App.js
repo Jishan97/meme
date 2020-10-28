@@ -16,7 +16,11 @@ import AdminControl from './components/auth/adminControl/AdminControl'
 
 import UserItemProfile from './components/auth/users/UserItemProfile'
 
+//Meme star || user by tag
+import UserByTag from './components/auth/users/userTag/MemeStar'
 
+// Blocked || Unblocked User || user by status
+import BlockedUser from './components/auth/users/userStatus/BlockedUser'
 
 //AdminState
 import AdminState from './context/AdminState'
@@ -53,7 +57,11 @@ function App() {
         <PrivateRoute  exact path="/allMemes" component={AllMemes}/>
         <PrivateRoute  exact path="/adminControl" component={AdminControl}/>
 
+        {/* Meme star || user by tag  */}
+        <PrivateRoute  exact path="/userByTag" component={UserByTag}/>
+        <PrivateRoute  exact path="/blockedUser" component={BlockedUser}/>
 
+        
 
 
       </Switch>

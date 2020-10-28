@@ -14,7 +14,14 @@ import {
   GET_TROPHY_SEGMENT,
   GET_UPCOMING_EVENT,
   GET_TOTAL_USER,
-  GET_USER_JOINED_TODAY
+  GET_USER_JOINED_TODAY,
+  GET_ALL_MEMES,
+  GET_USER_BY_USER_STATUS,
+  GET_USER_BY_USER_TAG,
+  APPROVE_MEME,
+  DISSAPPROVE_MEME,
+  UPDATE_USER_TAG,
+  SET_GOOGLE_ADS,
 } from "./type";
 
 export default (state, action) => {
@@ -98,6 +105,35 @@ export default (state, action) => {
         ...state,
         serviceLoading: true
       };
+
+    case GET_ALL_MEMES:
+      return{
+        ...state,
+        allMemes:action.payload,
+        serviceLoading: false
+      }
+    case APPROVE_MEME:
+      return{
+        ...state,
+        serviceLoading: false
+      }
+    case DISSAPPROVE_MEME:
+      return{
+        ...state,
+        serviceLoading: false
+      }
+    case GET_USER_BY_USER_TAG:
+      return{
+        ...state,
+        UserByTag:action.payload,
+        serviceLoading: false
+      }
+      case GET_USER_BY_USER_STATUS:
+          return{
+            ...state,
+            UserByStatus:action.payload,
+            serviceLoading: false
+          }
     default:
       return state;
   }

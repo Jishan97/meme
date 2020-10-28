@@ -51,7 +51,7 @@ router.get('/',auth,(req,res)=>{
     }
     catch(e){
         console.log(e)
-    }
+    }  
 })
 
 // Get all memes
@@ -60,9 +60,10 @@ router.get('/getAllMemes',auth,async(req,res)=>{
     const email = req.email.id;
     try{
         if(email == config.get('adminEmail')){
-            const allUsers = await MemeUser.find({});
+            const allUsers = await MemeUser.find({},{user_memes:1});
             const allMemes = [];
-            res.json(allUsers);
+            // console.log(allUsers)
+            res.json(allUsers[0].user_memes);
         
                 }
                 else{
@@ -188,17 +189,16 @@ router.get('/memes',async(req,res)=>{
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// Approved / Dissaproved Memes ////////////////////////
+////////////////////////////////// Approved / Dissaproved Memes / delete ////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-router.post('/approveMeme',async(req,res)=>{
+router.get('/approveMeme/:id',async(req,res)=>{
     
     try{
-        const memeID = req.body.memeID;
         const memes = await  MemeUser.update({
-            "user_memes._id":memeID
+            "user_memes._id":req.params.id
         },{
             "$set":{
                 "user_memes.$.meme_status":"approved"
@@ -211,11 +211,26 @@ router.post('/approveMeme',async(req,res)=>{
 })
 
 
-router.post('/DissApproveMeme',async(req,res)=>{
+router.get('/DissApproveMeme/:id',async(req,res)=>{
     try{
-        const memeID = req.body.memeID;
         const memes = await  MemeUser.update({
-            "user_memes._id":memeID
+            "user_memes._id":req.params.id
+        },{
+            "$set":{
+                "user_memes.$.meme_status":"dissapproved"
+            }
+        })
+        res.json(memes)
+    } catch(err){
+        res.status(500).send(err,'server error')
+    }
+})
+
+
+router.get('/DeleteMeme/:id',async(req,res)=>{
+    try{
+        const memes = await  MemeUser.update({
+            "user_memes._id":req.params.id
         },{
             "$set":{
                 "user_memes.$.meme_status":"dissapproved"

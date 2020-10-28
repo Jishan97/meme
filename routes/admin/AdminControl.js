@@ -404,4 +404,26 @@ router.put("/upcomingEvent", auth, async (req, res) => {
   }
 });
 
+
+
+
+//Google adds 
+// ON || OFF
+//GET API
+router.post("/controlGoogleAds",async(req,res)=>{
+
+  const boolValue = req.body.boolValue;
+  const data = await adminControl.findOneAndUpdate({role:'Admin'},{
+    googleAds:boolValue
+  },{
+    upsert:true
+  })
+
+  res.json(data)
+
+
+})
+
+
+
 module.exports = router;

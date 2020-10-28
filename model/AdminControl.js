@@ -15,7 +15,11 @@ const adminControlS = new Schema({
         ],
         trophy:[
             {name:String,image:String,uploads:Number}
-        ]
+        ],
+        googleAds:{
+            type:Boolean,
+            default:false
+        }
 
 })
 

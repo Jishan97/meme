@@ -75,6 +75,10 @@ export const GET_USER_BY_USER_STATUS = 'GET_USER_BY_USER_STATUS'
 export const UPDATE_USER_TAG ="UPDATE_USER_TAG"
 
 
+//Set google add 
+//ON || OFF
+export const SET_GOOGLE_ADS = "SET_GOOGLE_ADS"
+
 
 
 //Make meme star  || noob || memestar 

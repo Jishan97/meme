@@ -26,8 +26,10 @@ const authLink = (
  </a>
  <div className="dropdown-menu" aria-labelledby="navbarDropdown">
    <Link to="/users" className="dropdown-item">All Users</Link>
-   <a className="dropdown-item" href="#">Memes Star</a>
-   <a className="dropdown-item" href="#">Blocked Users</a>
+   <Link to="/userByTag" className="dropdown-item">Memes Star</Link>
+   <Link to="/blockedUser" className="dropdown-item">Blocked user</Link>
+
+   
 
  </div>
 </li>
