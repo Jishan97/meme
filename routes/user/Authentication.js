@@ -41,7 +41,7 @@ router.post("/registerGoogle", async (req, res) => {
               }, (err,token)=>{
                  if(err) throw err;
                 //  res.json({token});
-                console.log(token)
+                console.log('google sign token',token)
               })
 
         user.save().then(result => {
