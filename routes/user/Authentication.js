@@ -10,18 +10,21 @@ var { MemeData } = require("../../model/memeCollection");
 var { MemeUser } = require("../../model/memeUser");
 
 router.post("/registerGoogle", async (req, res) => {
-  console.log('NEW LOGIN')
+
+
+
     const date = new Date().toLocaleDateString();
     const username = req.body.username;
     const email = req.body.email;
     const user_avatar = req.body.userAvatar;
 
-    //find user exist or not
+    //find user exist or not 
     const data = await MemeUser.find({ email });
   
     try{
-
       console.log('NEW LOGIN')
+
+      console.log(email)  
   
       if (data.length <= 0) {
         var user = new MemeUser({
@@ -30,7 +33,8 @@ router.post("/registerGoogle", async (req, res) => {
           user_avatar,
           joining_date: date
         });
-    
+
+        await user.save();
             const payload = {
                 user:{
                     id:email
@@ -40,22 +44,37 @@ router.post("/registerGoogle", async (req, res) => {
                 expiresIn:360000 
               }, (err,token)=>{
                  if(err) throw err;
-                //  res.json({token});
-                console.log('google sign token',token)
+                 res.json({token});
+                // console.log('google sign token',token)
               })
 
-        user.save().then(result => {
-          console.log(result);
-          res.json("done");
-        });
+  
       } else {
-      res.json({msg:'already exits'})  
+
+         const payload = {
+                user:{
+                    id:email
+                }
+            } 
+            jwt.sign(payload, config.get('jwtSecret'),{        
+                expiresIn:360000 
+              }, (err,token)=>{
+                 if(err) throw err;
+                 console.log(token)
+                 res.json(token);
+                // console.log('google sign token',token)
+              })
        }
     }
     catch (error) {
       res.status(500).send('Something broke!')
     }
   });
+
+
+
+
+
 
 
   module.exports = router;

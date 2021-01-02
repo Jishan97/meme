@@ -228,7 +228,7 @@ app.post("/register", async (req, res) => {
 
     const hashedPassword = getHashedPassword(password);
 
-    var user = new MemeUser({
+    var user = new MemeUser({ 
       username,
       email,
       password: hashedPassword
