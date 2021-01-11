@@ -7,10 +7,6 @@ const {MemeUser} = require('../../model/memeUser')
 
 const auth = require('../../middleware/auth')
 
-
-
-
-
 router.get('/getAllUsers',auth,async(req,res)=>{
     const email = req.email.id;
 
