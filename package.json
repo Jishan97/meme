@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "alert-node": "^2.1.4",
-    "async": "^3.1.1",
+    "async": "^3.2.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
     "check-internet-connected": "^2.0.5",
